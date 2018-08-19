@@ -80,6 +80,7 @@ void SessionOrganizer::readInInputFile ( string filename )
     }
 
     a_star->distanceMatrix = tempDistanceMatrix;
+    a_star->updateValueFunction();
 
     int numberOfPapers = n;
     int slots = parallelTracks * papersInSession*sessionsInTrack;

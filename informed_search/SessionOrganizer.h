@@ -27,8 +27,6 @@ using namespace std;
  */
 class SessionOrganizer {
 private:
-    double ** distanceMatrix;
-
     int parallelTracks ;
     int papersInSession ;
     int sessionsInTrack ;
@@ -58,14 +56,7 @@ public:
      * Organize the papers according to some algorithm.
      */
     void organizePapers();
-    
-    
-    /**
-     * Get the distance matrix.
-     * @return the distance matrix.
-     */
-    double** getDistanceMatrix();
-    
+        
     
     /**
      * Score the organization.

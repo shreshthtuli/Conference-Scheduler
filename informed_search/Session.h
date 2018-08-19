@@ -21,14 +21,13 @@ using namespace std;
 class Session {
     
 private:    
-    int *papers;            // array of paper    
     int papersInSession;    // number of papers
+    int num_papers;
     
     
 public:
-    Session();
-    
-    
+    int *papers;            // array of paper    
+
     /**
      * Constructor
      * 
@@ -42,14 +41,6 @@ public:
      * @param papersInSession the number of papers in a session.
      */
     void initPapers(int papersInSession);
-
-
-    /**
-     * Get the number of papers in a session.
-     * 
-     * @return the number of papers.
-     */
-    int getNumberOfPapers();
 
     /**
      * Get the id of the paper at the specified index
@@ -65,7 +56,22 @@ public:
      * @param index is the index in the array
      * @param paperId is the id of the paper
      */
-    void setPaper(int index, int paperId);
+    void addPaper(int paperId);
+
+    /**
+     * Returns if session is full
+     */
+    bool isSessionFull();
+
+    /**
+     * Returns if session is empty
+     */
+    bool isSessionEmpty();
+
+    /**
+     * Copy Session
+     */
+    void copySession(int * papers_copy);
 
     /**
      * Print the papers present in current session 

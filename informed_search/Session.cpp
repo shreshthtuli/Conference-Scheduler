@@ -9,14 +9,10 @@
 
 #include "Session.h"
 
-Session::Session ( )
-{
-    papersInSession = 0;
-}
-
 Session::Session ( int papersInSession )
 {
     this->papersInSession = papersInSession;
+    this->num_papers = 0;
     initPapers ( papersInSession );
 }
 
@@ -29,34 +25,30 @@ void Session::initPapers ( int papersInSession )
     }
 }
 
-int Session::getNumberOfPapers ( )
-{
-    return papersInSession;
-}
-
 int Session::getPaper ( int index )
 {
-    if ( index < papersInSession )
-    {
-        return papers[index];
-    }
-    else
-    {
-        cout << "Index out of bound - Session::getPaper" << endl;
-        exit ( 0 );
-    }
+    return papers[index];
 }
 
-void Session::setPaper ( int index, int paperId )
+void Session::addPaper ( int paperId )
 {
-    if ( index < papersInSession )
-    {
-        papers[index] = paperId;
-    }
-    else
-    {
-        cout << "Index out of bound - Session::setPaper" << endl;
-        exit ( 0 );
+    papers[num_papers++] = paperId;
+}
+
+bool Session::isSessionFull()
+{
+    return num_papers == papersInSession;
+}
+
+bool Session::isSessionEmpty()
+{
+    return num_papers == 0;
+}
+
+void Session::copySession(int * papers_copy)
+{
+    for(int i = 0; i < papersInSession; i++){
+        papers[i] = papers_copy[i];
     }
 }
 

@@ -11,39 +11,44 @@ Node::Node(int parallelTracks, int sessionsInTrack, int papersInSession)
     Node::parallelTracks = parallelTracks;
     Node::sessionsInTrack = sessionsInTrack;
     Node::papersInSession = papersInSession;
+    this-> score = 0;
 
-    Node::size = parallelTracks * sessionsInTrack * papersInSession;
-    this->array = ( int * ) malloc ( sizeof (int ) * this->size  );
+    Node::size = parallelTracks * sessionsInTrack;
+    this->array = ( Session * ) malloc ( sizeof (Session ) * Node::size );
     for(int i = 0; i < Node::size; i++){
-        this->array[i] = -1;
+        this->array[i] = Session (papersInSession);
     }
 }
 
-Node::Node(int * node_array)
+Node::Node(Session * node_array)
 {
-    this->array = ( int * ) malloc ( sizeof (int ) * this->size  );
+    this->score = 0;
+    this->array = ( Session * ) malloc ( sizeof (Session ) * this->size  );
     for(int i = 0; i < Node::size; i++){
-        this->array[i] = node_array[i];
+        this->array[i].copySession(node_array[i].papers);
     }
 }
 
 int Node::get(int tracknumber, int sessionnumber, int paperIndex)
 {
-    return (this->array[paperIndex + Node::sessionsInTrack * (sessionnumber + (Node::parallelTracks * tracknumber))]);
+    return (this->array[sessionnumber + (Node::parallelTracks * tracknumber)].getPaper(paperIndex));
 }
 
-void Node::set(int tracknumber, int sessionnumber, int paperIndex, int value)
+bool Node::set(int tracknumber, int sessionnumber, int value)
 {
-    this->array[paperIndex + Node::sessionsInTrack * (sessionnumber + (Node::parallelTracks * tracknumber))] = value;
-}
-
-bool Node::isSessionFull(int tracknumber, int sessionnumber)
-{
-    for(int i = 0; i < this->papersInSession; i++)
-    {
-        if(this->get(tracknumber, sessionnumber, i) == -1){
-            return false;
-        }
+    if(this->array[sessionnumber + (Node::parallelTracks * tracknumber)].isSessionFull()){
+        return false;
     }
+    this->array[sessionnumber + (Node::parallelTracks * tracknumber)].addPaper(value);
     return true;
+}
+
+bool Node::isSessionEmpty(int tracknumber, int sessionnumber)
+{
+    return this->array[sessionnumber + (Node::parallelTracks * tracknumber)].isSessionEmpty();
+}
+
+bool Node::isComplete()
+{
+    return this->num_elements == this->size;
 }

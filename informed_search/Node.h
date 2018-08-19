@@ -10,6 +10,7 @@
 
 #include <iostream>
 #include <cstdlib>
+#include "Session.h"
 using namespace std;
 
 /**
@@ -27,9 +28,10 @@ private:
     static int parallelTracks;
     static int sessionsInTrack;
     static int papersInSession;
+    int num_elements;
     
 public:
-    int *array;             // Configuration array   
+    Session *array;         // Configuration array   
     double score;           // score of this node
 
 
@@ -43,7 +45,7 @@ public:
      * Node Constructor
      * Forms a new node with values as copy of the parent node
      */
-    Node(int *node_array);
+    Node(Session *node_array);
 
     /**
      * Get value at specified location
@@ -52,14 +54,19 @@ public:
 
     /**
      * Set value at specified location
+     * return false if full
      */
-    void set(int tracknumber, int sessionnumber, int paperIndex, int value);
+    bool set(int tracknumber, int sessionnumber, int value);
 
     /**
-     * Returns true if session is full
-     * false otherwise
+     * Returns if session is empty
      */
-    bool isSessionFull(int tracknumber, int sessionnumber);
+    bool isSessionEmpty(int tracknumber, int sessionnumber);
+
+    /**
+     * Is the Node complete, i.e. number of elements = size
+     */
+    bool isComplete();
 
 
     void printNode();
