@@ -50,7 +50,7 @@ void Conference::shuffle()
     int counter = 0;
     std::random_device rd;
     std::mt19937 g(rd());
-    std::shuffle(&this->shuffled_array[0], &this->shuffled_array[n+1], g);
+    std::shuffle(&this->shuffled_array[0], &this->shuffled_array[n], g);
 
     for ( int i = 0; i < this->getSessionsInTrack ( ); i++ )
     {
@@ -139,4 +139,23 @@ void Conference::printConference (char * filename )
     cout<<"Organization written to ";
     printf("%s :)\n",filename);
 
+}
+
+void Conference::printConference ()
+{
+    for ( int i = 0; i < sessionsInTrack; i++ )
+    {
+        for ( int j = 0; j < parallelTracks; j++ )
+        {
+            for ( int k = 0; k < papersInSession; k++ )
+            {
+                cout<< tracks[j].getSession ( i ).getPaper ( k ) << " ";
+            }
+            if ( j != parallelTracks - 1 )
+            {
+                cout<<"| ";
+            }
+        }
+        cout<<"\n";
+    }
 }

@@ -36,8 +36,13 @@ private:
     int sessionsInTrack ;
 
     Conference *conference;
+    Conference *best_conference;
+
+    double global_max;
 
     double processingTimeInMinutes ;
+    double currentTime;
+    double startTime;
     double tradeoffCoefficient ; // the tradeoff coefficient
     double cur_score;
     double new_score;
@@ -88,6 +93,11 @@ public:
      * When it returns false, return max score
      */
     double run();
+
+    /**
+     * Copies confernce to best_conference
+     */
+    void copyConference();
     
     void printSessionOrganiser(char *);
 };

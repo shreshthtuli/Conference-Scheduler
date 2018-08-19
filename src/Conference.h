@@ -109,6 +109,7 @@ public:
     
     
     void printConference(char *);
+    void printConference();
 };
 
 #endif	/* CONFERENCE_H */

@@ -6,6 +6,8 @@
 
 #include "SessionOrganizer.h"
 #include "Util.h"
+#include <ctime>
+#include <iostream>
 
 SessionOrganizer::SessionOrganizer ( )
 {
@@ -18,21 +20,49 @@ SessionOrganizer::SessionOrganizer ( )
 
 SessionOrganizer::SessionOrganizer ( string filename )
 {
+    global_max = 0;
     readInInputFile ( filename );
     conference = new Conference ( parallelTracks, sessionsInTrack, papersInSession );
+    best_conference = new Conference (parallelTracks, sessionsInTrack, papersInSession);
+    int counter = 0;
+    for ( int i = 0; i < best_conference->getSessionsInTrack ( ); i++ )
+    {
+        for ( int j = 0; j < best_conference->getParallelTracks ( ); j++ )
+        {
+            for ( int k = 0; k < best_conference->getPapersInSession ( ); k++ )
+            {
+                conference->setPaper ( j, i, k, counter++ );
+            }
+        }
+    }
+    conference->printConference();
+    cout << "Start score : " << scoreOrganization() << "\n";
 }
 
 void SessionOrganizer::organizePapers ( )
 {
-    int paperCounter = 0;
-    for ( int i = 0; i < conference->getSessionsInTrack ( ); i++ )
+    double result;
+    while(currentTime - startTime < ((processingTimeInMinutes * 60) - 10)){
+        result = run();
+        if (result > global_max){
+            global_max = result;
+            copyConference();
+        }
+        currentTime = time(0);
+    }
+}
+
+void SessionOrganizer::copyConference(){
+
+    int paperId;
+    for ( int i = 0; i < best_conference->getSessionsInTrack ( ); i++ )
     {
-        for ( int j = 0; j < conference->getParallelTracks ( ); j++ )
+        for ( int j = 0; j < best_conference->getParallelTracks ( ); j++ )
         {
-            for ( int k = 0; k < conference->getPapersInSession ( ); k++ )
+            for ( int k = 0; k < best_conference->getPapersInSession ( ); k++ )
             {
-                conference->setPaper ( j, i, k, paperCounter );
-                paperCounter++;
+                paperId = conference->getTrack(j).getSession(i).getPaper(k);
+                best_conference->setPaper ( j, i, k, paperId );
             }
         }
     }
@@ -42,7 +72,13 @@ double SessionOrganizer::run ( )
 {
     conference->shuffle();
     double max = 0;
-    while(getSuccessor()){}
+    cout << "Shuffled conference \n";
+    conference->printConference();
+    cout << "Score : " << scoreOrganization() << "\n" ;
+    while(getSuccessor()){
+        conference->printConference();
+        cout << "Score : " << scoreOrganization() << "\n" ;
+    }
     max = scoreOrganization();
     return max;
 }
@@ -51,6 +87,7 @@ void SessionOrganizer::readInInputFile ( string filename )
 {
     vector<string> lines;
     string line;
+    startTime = time(0);
     ifstream myfile ( filename.c_str () );
     if ( myfile.is_open ( ) )
     {
@@ -159,7 +196,7 @@ bool SessionOrganizer::getSuccessor()
 
 void SessionOrganizer::printSessionOrganiser ( char * filename)
 {
-    conference->printConference ( filename);
+    best_conference->printConference ( filename);
 }
 
 double SessionOrganizer::scoreOrganization ( )
