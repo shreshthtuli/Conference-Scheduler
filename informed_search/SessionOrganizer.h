@@ -13,9 +13,7 @@
 #include <vector>
 
 
-#include "Conference.h"
-#include "Track.h"
-#include "Session.h"
+#include "AStar.h"
 
 using namespace std;
 
@@ -35,7 +33,7 @@ private:
     int papersInSession ;
     int sessionsInTrack ;
 
-    Conference *conference;
+    AStar *a_star;
 
     double processingTimeInMinutes ;
     double tradeoffCoefficient ; // the tradeoff coefficient

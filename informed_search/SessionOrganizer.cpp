@@ -19,23 +19,12 @@ SessionOrganizer::SessionOrganizer ( )
 SessionOrganizer::SessionOrganizer ( string filename )
 {
     readInInputFile ( filename );
-    conference = new Conference ( parallelTracks, sessionsInTrack, papersInSession );
+    a_star = new AStar ( parallelTracks, sessionsInTrack, papersInSession );
 }
 
 void SessionOrganizer::organizePapers ( )
 {
-    int paperCounter = 0;
-    for ( int i = 0; i < conference->getSessionsInTrack ( ); i++ )
-    {
-        for ( int j = 0; j < conference->getParallelTracks ( ); j++ )
-        {
-            for ( int k = 0; k < conference->getPapersInSession ( ); k++ )
-            {
-                conference->setPaper ( j, i, k, paperCounter );
-                paperCounter++;
-            }
-        }
-    }
+    // run a* algo here
 }
 
 void SessionOrganizer::readInInputFile ( string filename )
@@ -89,7 +78,8 @@ void SessionOrganizer::readInInputFile ( string filename )
             tempDistanceMatrix[i][j] = atof ( elements[j].c_str () );
         }
     }
-    distanceMatrix = tempDistanceMatrix;
+
+    a_star->distanceMatrix = tempDistanceMatrix;
 
     int numberOfPapers = n;
     int slots = parallelTracks * papersInSession*sessionsInTrack;
@@ -100,14 +90,9 @@ void SessionOrganizer::readInInputFile ( string filename )
     }
 }
 
-double** SessionOrganizer::getDistanceMatrix ( )
-{
-    return distanceMatrix;
-}
-
 void SessionOrganizer::printSessionOrganiser ( char * filename)
 {
-    conference->printConference ( filename);
+    a_star->printConference ( filename);
 }
 
 double SessionOrganizer::scoreOrganization ( )
