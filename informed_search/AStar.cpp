@@ -7,7 +7,7 @@
 #include "AStar.h"
 #include "Node.h"
 #include "NodeComparator.h"
-#include "Util.h"
+#include <fstream>
 
 AStar::AStar(int parallelTracks, int sessionsInTrack, int papersInSession, double tradeOffCoefficient)
 {
