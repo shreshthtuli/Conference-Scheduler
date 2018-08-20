@@ -77,7 +77,7 @@ public:
      */
     void calcScore();
 
-
+    void printConference();
     void printConference(char *);
 };
 

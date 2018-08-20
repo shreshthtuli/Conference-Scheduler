@@ -1,2 +1,2 @@
- all: main.cpp Track.cpp Session.cpp Conference.cpp SessionOrganizer.cpp
-	  g++ -o main main.cpp Track.cpp Session.cpp Conference.cpp SessionOrganizer.cpp
+ all: main.cpp Node.cpp Session.cpp AStar.cpp SessionOrganizer.cpp
+	  g++ -o main main.cpp Session.cpp Node.cpp AStar.cpp SessionOrganizer.cpp

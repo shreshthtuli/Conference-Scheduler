@@ -19,12 +19,13 @@ SessionOrganizer::SessionOrganizer ( )
 SessionOrganizer::SessionOrganizer ( string filename )
 {
     readInInputFile ( filename );
-    a_star = new AStar ( parallelTracks, sessionsInTrack, papersInSession );
+    a_star = new AStar ( parallelTracks, sessionsInTrack, papersInSession, tradeoffCoefficient );
 }
 
 void SessionOrganizer::organizePapers ( )
 {
     // run a* algo here
+    a_star->iterate();
 }
 
 void SessionOrganizer::readInInputFile ( string filename )
@@ -79,8 +80,14 @@ void SessionOrganizer::readInInputFile ( string filename )
         }
     }
 
+    cout << "Constructing distanceMatrix of a_star" << endl;
     a_star->distanceMatrix = tempDistanceMatrix;
+    cout << "Constructed distanceMatrix of a_star" << endl;
+
+    cout << "Updating value functions: " << endl;
     a_star->updateValueFunction();
+    cout << "Updagted value functions: " << endl;
+    
 
     int numberOfPapers = n;
     int slots = parallelTracks * papersInSession*sessionsInTrack;
@@ -96,54 +103,7 @@ void SessionOrganizer::printSessionOrganiser ( char * filename)
     a_star->printConference ( filename);
 }
 
-double SessionOrganizer::scoreOrganization ( )
+double SessionOrganizer::scoreOrganization()
 {
-    // Sum of pairwise similarities per session.
-    double score1 = 0.0;
-    for ( int i = 0; i < conference->getParallelTracks ( ); i++ )
-    {
-        Track tmpTrack = conference->getTrack ( i );
-        for ( int j = 0; j < tmpTrack.getNumberOfSessions ( ); j++ )
-        {
-            Session tmpSession = tmpTrack.getSession ( j );
-            for ( int k = 0; k < tmpSession.getNumberOfPapers ( ); k++ )
-            {
-                int index1 = tmpSession.getPaper ( k );
-                for ( int l = k + 1; l < tmpSession.getNumberOfPapers ( ); l++ )
-                {
-                    int index2 = tmpSession.getPaper ( l );
-                    score1 += 1 - distanceMatrix[index1][index2];
-                }
-            }
-        }
-    }
-
-    // Sum of distances for competing papers.
-    double score2 = 0.0;
-    for ( int i = 0; i < conference->getParallelTracks ( ); i++ )
-    {
-        Track tmpTrack1 = conference->getTrack ( i );
-        for ( int j = 0; j < tmpTrack1.getNumberOfSessions ( ); j++ )
-        {
-            Session tmpSession1 = tmpTrack1.getSession ( j );
-            for ( int k = 0; k < tmpSession1.getNumberOfPapers ( ); k++ )
-            {
-                int index1 = tmpSession1.getPaper ( k );
-
-                // Get competing papers.
-                for ( int l = i + 1; l < conference->getParallelTracks ( ); l++ )
-                {
-                    Track tmpTrack2 = conference->getTrack ( l );
-                    Session tmpSession2 = tmpTrack2.getSession ( j );
-                    for ( int m = 0; m < tmpSession2.getNumberOfPapers ( ); m++ )
-                    {
-                        int index2 = tmpSession2.getPaper ( m );
-                        score2 += distanceMatrix[index1][index2];
-                    }
-                }
-            }
-        }
-    }
-    double score = score1 + tradeoffCoefficient*score2;
-    return score;
+    return a_star->max_score;
 }

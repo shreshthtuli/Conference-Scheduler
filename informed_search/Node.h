@@ -24,16 +24,17 @@ class Node {
     
 private:    
     
-    static int size;
-    static int parallelTracks;
-    static int sessionsInTrack;
-    static int papersInSession;
+    int size;
+    int parallelTracks;
+    int sessionsInTrack;
+    int papersInSession;
     int num_elements;
     
 public:
     Session *array;         // Configuration array   
     double score;           // score of this node
 
+    Node();
 
     /**
      * Node constructor

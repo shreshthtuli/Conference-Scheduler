@@ -8,6 +8,8 @@
         "xutility": "cpp",
         "queue": "cpp",
         "algorithm": "cpp",
-        "limits": "cpp"
+        "limits": "cpp",
+        "iostream": "cpp",
+        "string": "cpp"
     }
 }
