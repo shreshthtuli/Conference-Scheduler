@@ -27,12 +27,12 @@ void Session::initPapers ( int papersInSession )
 
 int Session::getPaper ( int index )
 {
-    return papers[index];
+    return(papers[index]);
 }
 
 void Session::addPaper ( int paperId )
 {
-    papers[num_papers++] = paperId;
+    papers[this->num_papers++] = paperId;
 }
 
 bool Session::isSessionFull()
@@ -42,7 +42,7 @@ bool Session::isSessionFull()
 
 bool Session::isSessionEmpty()
 {
-    return num_papers == 0;
+    return(num_papers == 0);
 }
 
 void Session::copySession(int * papers_copy)

@@ -21,16 +21,14 @@ using namespace std;
  */
 
 class Node {
-    
-private:    
-    
+        
+public:
     int size;
+
+    int num_elements;
     int parallelTracks;
     int sessionsInTrack;
     int papersInSession;
-    int num_elements;
-    
-public:
     Session *array;         // Configuration array   
     double score;           // score of this node
 
@@ -46,7 +44,7 @@ public:
      * Node Constructor
      * Forms a new node with values as copy of the parent node
      */
-    Node(Session *node_array);
+    Node(Session *node_array, int parallelTracks, int sessionsInTrack, int papersInSession, int num_el);
 
     /**
      * Get value at specified location
@@ -70,6 +68,7 @@ public:
     bool isComplete();
 
 
+    void printNode(char * filename);
     void printNode();
 };
 

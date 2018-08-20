@@ -19,7 +19,6 @@ SessionOrganizer::SessionOrganizer ( )
 SessionOrganizer::SessionOrganizer ( string filename )
 {
     readInInputFile ( filename );
-    a_star = new AStar ( parallelTracks, sessionsInTrack, papersInSession, tradeoffCoefficient );
 }
 
 void SessionOrganizer::organizePapers ( )
@@ -80,13 +79,14 @@ void SessionOrganizer::readInInputFile ( string filename )
         }
     }
 
+    a_star = new AStar ( parallelTracks, sessionsInTrack, papersInSession, tradeoffCoefficient );
     cout << "Constructing distanceMatrix of a_star" << endl;
     a_star->distanceMatrix = tempDistanceMatrix;
     cout << "Constructed distanceMatrix of a_star" << endl;
 
     cout << "Updating value functions: " << endl;
     a_star->updateValueFunction();
-    cout << "Updagted value functions: " << endl;
+    cout << "Updated value functions: " << endl;
     
 
     int numberOfPapers = n;
@@ -100,7 +100,7 @@ void SessionOrganizer::readInInputFile ( string filename )
 
 void SessionOrganizer::printSessionOrganiser ( char * filename)
 {
-    a_star->printConference ( filename);
+    a_star->printConference( filename);
 }
 
 double SessionOrganizer::scoreOrganization()
