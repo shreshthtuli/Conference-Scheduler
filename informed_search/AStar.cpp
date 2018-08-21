@@ -8,6 +8,8 @@
 #include "Node.h"
 #include "NodeComparator.h"
 #include <fstream>
+#include <random>
+#include <algorithm>
 
 AStar::AStar(int parallelTracks, int sessionsInTrack, int papersInSession, double tradeOffCoefficient)
 {
@@ -21,17 +23,26 @@ AStar::AStar(int parallelTracks, int sessionsInTrack, int papersInSession, doubl
     n = parallelTracks * sessionsInTrack * papersInSession;
     this->tradeoffCoefficient = tradeOffCoefficient;
 
-    Node first_node (parallelTracks, sessionsInTrack, papersInSession);
-    cout << first_node.set(0, 0, 0) << endl;
-    cout << "First node : \n";
-    first_node.printNode();
-    queue.push(first_node);
-    index = 0;
-
     this->maxDistanceArray = ( double * ) malloc ( sizeof (double ) * n );
     this->maxSimilarityArray = ( double * ) malloc ( sizeof (double ) * n );
     this->maxDistance = 1;
     this->maxSimilarity = 1;
+    this->shuffled_array = (int *) malloc (sizeof (int) * n);
+    for(int i = 0; i < n; i++){
+        this->shuffled_array[i] = i;
+        
+    }
+    std::random_device rd;
+    std::mt19937 g(rd());
+    std::shuffle(&this->shuffled_array[0], &this->shuffled_array[n], g);
+    // for(int i = 0; i < n; i++){
+    //     cout << this->shuffled_array[i] << " ";
+    // }
+    Node first_node (parallelTracks, sessionsInTrack, papersInSession);
+    cout << first_node.set(0, 0, this->shuffled_array[0]) << endl;
+    cout << "First node : \n";
+    first_node.printNode();
+    queue.push(first_node);
 
     this->distanceMatrix = new double*[n];
     for ( int i = 0; i < n; ++i )
@@ -63,7 +74,7 @@ void AStar::iterate()
 
 void AStar::generateSucessors()
 {
-    index = curNode.num_elements; // Increment index
+    index = this->shuffled_array[curNode.num_elements]; // Increment index
     cout << "Inserting index = " << index << endl;
     for(int i = 0; i < this->sessionsInTrack; i++)
     {
@@ -94,7 +105,10 @@ void AStar::updateValueFunction()
         double max = 0;
         double min = 1;
         for(int j = 0; j < n; j++)
-        {
+        {   
+            if(i == j){
+                continue;
+            }
             if(this->distanceMatrix[i][j] > max){
                 max = distanceMatrix[i][j];
             }
@@ -116,8 +130,8 @@ void AStar::updateValueFunction()
         }
     }
 
-    this->maxDistance = 1;
-    this->maxSimilarity = 1;
+    this->maxDistance = gmax;
+    this->maxSimilarity = 1 - gmin;
 }
 
 double AStar::calcScore(Node newNode)
