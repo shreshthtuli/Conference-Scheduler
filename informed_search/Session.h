@@ -21,11 +21,11 @@ using namespace std;
 class Session {
     
 private:    
-    int papersInSession;    // number of papers
-    int num_papers;
-    
+    int papersInSession;    // number of papers    
     
 public:
+    int num_papers;
+
     int *papers;            // array of paper    
 
     /**

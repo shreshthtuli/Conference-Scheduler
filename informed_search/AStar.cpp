@@ -12,16 +12,26 @@
 AStar::AStar(int parallelTracks, int sessionsInTrack, int papersInSession, double tradeOffCoefficient)
 {
     max_score = 0;
-    parallelTracks = parallelTracks;
-    sessionsInTrack = sessionsInTrack;
-    papersInSession = papersInSession;
+    this->parallelTracks = parallelTracks;
+    cout << "Parallel Tracks : " << parallelTracks << endl;
+    this->sessionsInTrack = sessionsInTrack;
+    cout << "Sessions in Track : " << sessionsInTrack << endl;
+    this->papersInSession = papersInSession;
+    cout << "Papers in session : " << papersInSession << endl;
     n = parallelTracks * sessionsInTrack * papersInSession;
-    tradeoffCoefficient = tradeOffCoefficient;
+    this->tradeoffCoefficient = tradeOffCoefficient;
 
-    Node *first_node = new Node(parallelTracks, sessionsInTrack, papersInSession);
-    first_node->set(0, 0, 0);
-    queue.push(*first_node);
+    Node first_node (parallelTracks, sessionsInTrack, papersInSession);
+    cout << first_node.set(0, 0, 0) << endl;
+    cout << "First node : \n";
+    first_node.printNode();
+    queue.push(first_node);
     index = 0;
+
+    this->maxDistanceArray = ( double * ) malloc ( sizeof (double ) * n );
+    this->maxSimilarityArray = ( double * ) malloc ( sizeof (double ) * n );
+    this->maxDistance = 1;
+    this->maxSimilarity = 1;
 
     this->distanceMatrix = new double*[n];
     for ( int i = 0; i < n; ++i )
@@ -32,37 +42,43 @@ AStar::AStar(int parallelTracks, int sessionsInTrack, int papersInSession, doubl
 
 void AStar::iterate()
 {
+    cout << "Queue size : " << queue.size() << endl;
     while(!queue.empty())
     {
         curNode = queue.top();
-        printConference();
+        cout << "Current Node \n";
+        curNode.printNode();
         cout << "Score : " << curNode.score << "\n";
         queue.pop();
-        if(curNode.isComplete()){
+        if(curNode.num_elements == curNode.size * papersInSession){
+            cout << "Exiting while \n";
             break;
         }
         generateSucessors();
     }
-
+    cout << "A* iterate method ended" << endl;
     max_score = curNode.score;
 
 }
 
 void AStar::generateSucessors()
 {
-    index++; // Increment index
-    for(int i = 0; i < sessionsInTrack; i++)
+    index = curNode.num_elements; // Increment index
+    cout << "Inserting index = " << index << endl;
+    for(int i = 0; i < this->sessionsInTrack; i++)
     {
-        for(int j = 0; j < parallelTracks; j++)
+        for(int j = 0; j < this->parallelTracks; j++)
         {
-            if( i > 1 && curNode.isSessionEmpty(j, i-1) )
+            if( i >= 1 && curNode.isSessionEmpty(j, i-1) )
             {
                 continue;
             }
-            newNode = Node(curNode.array);
+            Node newNode (curNode.array, curNode.parallelTracks, curNode.sessionsInTrack, curNode.papersInSession, curNode.num_elements);
             if(newNode.set(j, i, index))
             {
-                calcScore(); // Calculate score of newNode
+                cout << "Inserted a node at " << i << ", " << j << endl;
+                newNode.printNode();
+                newNode.score = calcScore(newNode); // Calculate score of newNode
                 queue.push(newNode);
             }
         }
@@ -79,58 +95,58 @@ void AStar::updateValueFunction()
         double min = 1;
         for(int j = 0; j < n; j++)
         {
-            if(distanceMatrix[i][j] > max){
+            if(this->distanceMatrix[i][j] > max){
                 max = distanceMatrix[i][j];
             }
-            if(distanceMatrix[i][j] < min)
+            if(this->distanceMatrix[i][j] < min)
             {
                 min = distanceMatrix[i][j];
             }
         }
-        maxDistanceArray[i] = max;
-        maxSimilarityArray[i] = 1 - min;
+        this->maxDistanceArray[i] = max;
+        this->maxSimilarityArray[i] = 1 - min;
 
-        if(gmax > max)
+        if(gmax < max)
         {
             gmax = max;
         }
-        if(gmin < min)
+        if(gmin > min)
         {
             gmin = min;
         }
     }
 
-    maxDistance = gmax;
-    maxSimilarity = 1 - gmin;
+    this->maxDistance = 1;
+    this->maxSimilarity = 1;
 }
 
-void AStar::calcScore()
+double AStar::calcScore(Node newNode)
 {
     // Similarity Score
     double score1 = 0;
     int x;
     int y;
-    for(int i = 0; i < parallelTracks; i++)
+    for(int i = 0; i < this->parallelTracks; i++)
     {
-        for(int j = 0; j < sessionsInTrack; j++)
+        for(int j = 0; j < this->sessionsInTrack; j++)
         {
-            for(int k = 0; k < papersInSession; k++)
+            for(int k = 0; k < this->papersInSession; k++)
             {
-                for(int l = k+1; l < papersInSession; l++)
+                for(int l = k+1; l < this->papersInSession; l++)
                 {
                     x = newNode.get(i, j, k);
                     y = newNode.get(i, j, l);
                     if(x != -1 && y != -1){
-                        score1 += (1 - distanceMatrix[x][y]);
+                        score1 += (1 - this->distanceMatrix[x][y]);
                     }
                     else if(x != -1 && y == -1){
-                        score1 += maxSimilarityArray[x];
+                        score1 += this->maxSimilarityArray[x];
                     }
                     else if(x == -1 && y != -1){
-                        score1 += maxSimilarityArray[y];
+                        score1 += this->maxSimilarityArray[y];
                     }
                     else if(x == -1 && y == -1){
-                        score1 += maxSimilarity;
+                        score1 += this->maxSimilarity;
                     }
                     
                 }
@@ -140,74 +156,55 @@ void AStar::calcScore()
 
     // Distance score
     double score2 = 0;
-    for(int i = 0; i < parallelTracks; i++)
+    for(int i = 0; i < this->parallelTracks; i++)
     {
-        for(int j = 0; j < sessionsInTrack; j++)
+        for(int j = 0; j < this->sessionsInTrack; j++)
         {
-            for(int k = 0; k < papersInSession; k++)
+            for(int k = 0; k < this->papersInSession; k++)
             {
-                for(int l = i + 1; l < parallelTracks; l++)
+                for(int l = i + 1; l < this->parallelTracks; l++)
                 {
-                    for(int m = 0; m < papersInSession; m++)
+                    for(int m = 0; m < this->papersInSession; m++)
                     {
                         x = newNode.get(i, j, k);
                         y = newNode.get(l, j, m);
                         if(x != -1 && y != -1){
-                            score2 += distanceMatrix[x][y];
+                            score2 += this->distanceMatrix[x][y];
                         }
                         else if(x != -1 && y == -1){
-                            score2 += maxDistanceArray[x];
+                            score2 += this->maxDistanceArray[x];
                         }
                         else if(x == -1 && y != -1){
-                            score1 += maxDistanceArray[y];
+                            score1 += this->maxDistanceArray[y];
                         }
                         else if(x == -1 && y == -1){
-                            score1 += maxDistance;
+                            score1 += this->maxDistance;
                         }
                     }
                 }
             }
         }
     }
-
-    newNode.score = score1 + score2;
+    cout << "Score : " << score1+score2 << endl;
+    return score1 + score2;
 }
 
 void AStar::printConference(char * filename)
 {
-    ofstream ofile(filename);
-
-    for ( int i = 0; i < sessionsInTrack; i++ )
-    {
-        for ( int j = 0; j < parallelTracks; j++ )
-        {
-            for ( int k = 0; k < papersInSession; k++ )
-            {
-                ofile<< curNode.get(j, i, k) << " ";
-            }
-            if ( j != parallelTracks - 1 )
-            {
-                ofile<<"| ";
-            }
-        }
-        ofile<<"\n";
-    }
-    ofile.close();
-    cout<<"Organization written to ";
-    printf("%s :)\n",filename);
+    curNode.printNode(filename);
 }
 
 void AStar::printConference()
 {
-    for ( int i = 0; i < sessionsInTrack; i++ )
+    for ( int i = 0; i < this->sessionsInTrack; i++ )
     {
-        for ( int j = 0; j < parallelTracks; j++ )
+        for ( int j = 0; j < this->parallelTracks; j++ )
         {
-            for ( int k = 0; k < papersInSession; k++ )
+            for ( int k = 0; k < this->papersInSession; k++ )
             {
                 cout << curNode.get(j, i, k) << " ";
             }
-            if ( j != parallelTracks - 1 )
+            if ( j != this->parallelTracks - 1 )
             {
                 cout <<"| ";
             }

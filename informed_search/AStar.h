@@ -32,7 +32,6 @@ private:
     int papersInSession;
     int n;
     double tradeoffCoefficient;
-    Node curNode;
     Node newNode;
     int index;
     
@@ -42,6 +41,7 @@ public:
     // max score of the nodes
     double max_score;       
     double ** distanceMatrix;
+    Node curNode;
 
     // Value Functions
     double * maxDistanceArray;
@@ -75,7 +75,7 @@ public:
      * Calculate Scores of generated nodes based on 
      * heuristic function
      */
-    void calcScore();
+    double calcScore(Node n);
 
     void printConference();
     void printConference(char *);
