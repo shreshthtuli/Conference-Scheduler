@@ -34,6 +34,7 @@ private:
     double tradeoffCoefficient;
     Node newNode;
     int index;
+    int *shuffled_array;
     
 public:
     // A* priority queue  
