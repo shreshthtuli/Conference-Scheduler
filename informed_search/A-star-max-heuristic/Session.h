@@ -33,7 +33,7 @@ public:
      * 
      * @param papersInSession the number of papers in a session.
      */
-    Session(int papersInSession);
+    Session();
 
     /**
      * Initialize the array of papers.

@@ -22,16 +22,9 @@ Node::Node(int parallelTracks, int sessionsInTrack, int papersInSession)
     this->num_elements = 0;
 
     this->size = parallelTracks * sessionsInTrack;
-<<<<<<< HEAD
-    this->array = new Session[this->size](papersInSession);
-=======
-    // this->array = ( Session * ) malloc ( sizeof (Session ) * this->size );
     this->array = new Session[this->size];
-
->>>>>>> d9102eee1be7b8746fdbe612244a785776d336bf
     for(int i = 0; i < this->size; i++){
-        Session tempSession = Session(papersInSession);
-        this->array[i] = tempSession;
+        this->array[i].initPapers(papersInSession);
     }
 }
 
@@ -43,14 +36,13 @@ Node::Node(Session * node_array, int parallelTracks, int sessionsInTrack, int pa
     this->score = 0;
     this->num_elements = num_el;
     this->size = parallelTracks * sessionsInTrack;
-    this->array = new Session[this->size](papersInSession);
+    this->array = new Session[this->size];
     for(int i = 0; i < this->size; i++){
-        Session tempSession = Session(papersInSession);
-        tempSession.num_papers = node_array[i].num_papers;
+        this->array[i].initPapers(papersInSession);
+        this->array[i].num_papers = node_array[i].num_papers;
         for(int j = 0; j < this->papersInSession; j++){
-            tempSession.papers[j] = node_array[i].papers[j];
+            this->array[i].papers[j] = node_array[i].papers[j];
         }
-        this->array[i] = tempSession;
     }
 }
 
@@ -125,9 +117,5 @@ void Node::printNode()
 
 Node::~Node()
 {
-<<<<<<< HEAD
-    delete(array);
-=======
-    delete(this->array);
->>>>>>> d9102eee1be7b8746fdbe612244a785776d336bf
+    //delete(array);
 }

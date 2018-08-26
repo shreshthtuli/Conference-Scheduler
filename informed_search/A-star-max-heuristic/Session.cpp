@@ -9,11 +9,10 @@
 
 #include "Session.h"
 
-Session::Session ( int papersInSession )
+Session::Session ( )
 {
     this->papersInSession = papersInSession;
     this->num_papers = 0;
-    initPapers ( papersInSession );
 }
 
 void Session::initPapers ( int papersInSession )
