@@ -11,12 +11,12 @@
 
 Session::Session ( )
 {
-    this->papersInSession = papersInSession;
-    this->num_papers = 0;
 }
 
 void Session::initPapers ( int papersInSession )
 {
+    this->papersInSession = papersInSession;
+    this->num_papers = 0;
     this->papers = new int[papersInSession]();
     for ( int i = 0; i < papersInSession; i++ )
     {
@@ -36,7 +36,7 @@ void Session::addPaper ( int paperId )
 
 bool Session::isSessionFull()
 {
-    return num_papers == papersInSession;
+    return num_papers == this->papersInSession;
 }
 
 bool Session::isSessionEmpty()

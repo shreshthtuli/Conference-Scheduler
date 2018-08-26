@@ -72,12 +72,12 @@ double SessionOrganizer::run ( )
 {
     conference->shuffle();
     double max = 0;
-    cout << "Shuffled conference \n";
-    conference->printConference();
-    cout << "Score : " << scoreOrganization() << "\n" ;
+    //cout << "Shuffled conference \n";
+    //conference->printConference();
+    //cout << "Score : " << scoreOrganization() << "\n" ;
     while(getSuccessor()){
-        conference->printConference();
-        cout << "Score : " << scoreOrganization() << "\n" ;
+        //conference->printConference();
+        //cout << "Score : " << scoreOrganization() << "\n" ;
     }
     max = scoreOrganization();
     return max;

@@ -53,11 +53,12 @@ int Node::get(int tracknumber, int sessionnumber, int paperIndex)
 
 bool Node::set(int tracknumber, int sessionnumber, int value)
 {
-    this->num_elements++;
     if(this->array[tracknumber + (this->parallelTracks * sessionnumber)].isSessionFull()){
+        cout << "Session full " << sessionnumber << " " << tracknumber << endl;
         return false;
     }
     this->array[tracknumber + (this->parallelTracks * sessionnumber)].addPaper(value);
+    this->num_elements++;
     return true;
 }
 
@@ -111,6 +112,7 @@ void Node::printNode()
                 cout <<"| ";
             }
         }
-        cout <<"\n";
+        cout << endl;
+        // cout <<"\nNumber of elements : " << this->num_elements << endl;
     }
 }
