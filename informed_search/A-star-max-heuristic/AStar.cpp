@@ -57,9 +57,9 @@ void AStar::iterate()
     while(!queue.empty())
     {
         curNode = queue.top();
-        cout << "Current Node \n";
-        curNode.printNode();
-        cout << "Score : " << curNode.score << "\n";
+        //cout << "Current Node \n";
+        //curNode.printNode();
+        //cout << "Score : " << curNode.score << "\n";
         queue.pop();
         if(curNode.num_elements == curNode.size * papersInSession){
             cout << "Exiting while \n";
@@ -75,7 +75,7 @@ void AStar::iterate()
 void AStar::generateSucessors()
 {
     index = this->shuffled_array[curNode.num_elements]; // Increment index
-    cout << "Inserting index = " << index << endl;
+    //cout << "Inserting index = " << index << endl;
     for(int i = 0; i < this->sessionsInTrack; i++)
     {
         for(int j = 0; j < this->parallelTracks; j++)
@@ -87,8 +87,8 @@ void AStar::generateSucessors()
             Node newNode (curNode.array, curNode.parallelTracks, curNode.sessionsInTrack, curNode.papersInSession, curNode.num_elements);
             if(newNode.set(j, i, index))
             {
-                cout << "Inserted a node at " << i << ", " << j << endl;
-                newNode.printNode();
+                //cout << "Inserted a node at " << i << ", " << j << endl;
+                //newNode.printNode();
                 newNode.score = calcScore(newNode); // Calculate score of newNode
                 queue.push(newNode);
             }
@@ -199,7 +199,7 @@ double AStar::calcScore(Node newNode)
             }
         }
     }
-    cout << "Score : " << score1+score2 << endl;
+    //cout << "Score : " << score1+score2 << endl;
     return score1 + score2;
 }
 
