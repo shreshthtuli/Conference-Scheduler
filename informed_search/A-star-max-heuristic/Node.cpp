@@ -116,3 +116,8 @@ void Node::printNode()
         cout <<"\n";
     }
 }
+
+void Node::~Node()
+{
+    free(array);
+}
