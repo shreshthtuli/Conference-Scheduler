@@ -75,7 +75,7 @@ double SessionOrganizer::run ( )
     //cout << "Shuffled conference \n";
     //conference->printConference();
     //cout << "Score : " << scoreOrganization() << "\n" ;
-    while(getSuccessor()){
+    while(getSuccessor() && currentTime - startTime < ((processingTimeInMinutes * 60) - 10)){
         //conference->printConference();
         //cout << "Score : " << scoreOrganization() << "\n" ;
     }
