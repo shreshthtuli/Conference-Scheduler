@@ -47,11 +47,6 @@ public:
     Node(Session *node_array, int parallelTracks, int sessionsInTrack, int papersInSession, int num_el);
 
     /**
-     * Node destructor
-     */
-    ~Node();
-
-    /**
      * Get value at specified location
      */
     int get(int tracknumber, int sessionnumber, int paperIndex);

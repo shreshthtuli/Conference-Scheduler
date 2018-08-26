@@ -23,11 +23,11 @@ AStar::AStar(int parallelTracks, int sessionsInTrack, int papersInSession, doubl
     n = parallelTracks * sessionsInTrack * papersInSession;
     this->tradeoffCoefficient = tradeOffCoefficient;
 
-    this->maxDistanceArray = ( double * ) malloc ( sizeof (double ) * n );
-    this->maxSimilarityArray = ( double * ) malloc ( sizeof (double ) * n );
+    this->maxDistanceArray = new double[n]();
+    this->maxSimilarityArray = new double[n]();
     this->maxDistance = 1;
     this->maxSimilarity = 1;
-    this->shuffled_array = (int *) malloc (sizeof (int) * n);
+    this->shuffled_array = new int[n]();
     for(int i = 0; i < n; i++){
         this->shuffled_array[i] = i;
         
@@ -35,9 +35,9 @@ AStar::AStar(int parallelTracks, int sessionsInTrack, int papersInSession, doubl
     std::random_device rd;
     std::mt19937 g(rd());
     std::shuffle(&this->shuffled_array[0], &this->shuffled_array[n], g);
-    // for(int i = 0; i < n; i++){
-    //     cout << this->shuffled_array[i] << " ";
-    // }
+    for(int i = 0; i < n; i++){
+        cout << this->shuffled_array[i] << " ";
+    }
     Node first_node (parallelTracks, sessionsInTrack, papersInSession);
     cout << first_node.set(0, 0, this->shuffled_array[0]) << endl;
     cout << "First node : \n";
@@ -65,7 +65,6 @@ void AStar::iterate()
             cout << "Exiting while \n";
             break;
         }
-        curNode.~Node();
         generateSucessors();
     }
     cout << "A* iterate method ended" << endl;

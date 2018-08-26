@@ -17,7 +17,7 @@ Session::Session ( )
 
 void Session::initPapers ( int papersInSession )
 {
-    this->papers = ( int * ) malloc ( sizeof (int ) * papersInSession );
+    this->papers = new int[papersInSession]();
     for ( int i = 0; i < papersInSession; i++ )
     {
         papers[i] = -1;

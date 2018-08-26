@@ -1,5 +1,5 @@
 /* 
- * File:   Node.cpp
+ * File: Node.cpp
  * Author: Shreshth Tuli
  * 
  */
@@ -113,9 +113,4 @@ void Node::printNode()
         }
         cout <<"\n";
     }
-}
-
-Node::~Node()
-{
-    //delete(array);
 }

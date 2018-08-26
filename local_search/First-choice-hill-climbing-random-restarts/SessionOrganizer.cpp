@@ -197,6 +197,8 @@ bool SessionOrganizer::getSuccessor()
 void SessionOrganizer::printSessionOrganiser ( char * filename)
 {
     best_conference->printConference ( filename);
+    conference = best_conference;
+    cout << "Best score : " << scoreOrganization() << " \n";
 }
 
 double SessionOrganizer::scoreOrganization ( )
