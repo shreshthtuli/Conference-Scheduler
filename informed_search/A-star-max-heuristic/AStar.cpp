@@ -65,7 +65,7 @@ void AStar::iterate()
             cout << "Exiting while \n";
             break;
         }
-        delete(curNode);
+        curNode.~Node();
         generateSucessors();
     }
     cout << "A* iterate method ended" << endl;

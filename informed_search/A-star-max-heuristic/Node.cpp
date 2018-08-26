@@ -22,7 +22,7 @@ Node::Node(int parallelTracks, int sessionsInTrack, int papersInSession)
     this->num_elements = 0;
 
     this->size = parallelTracks * sessionsInTrack;
-    this->array = ( Session * ) malloc ( sizeof (Session ) * this->size );
+    this->array = new Session[this->size](papersInSession);
     for(int i = 0; i < this->size; i++){
         Session tempSession = Session(papersInSession);
         this->array[i] = tempSession;
@@ -37,7 +37,7 @@ Node::Node(Session * node_array, int parallelTracks, int sessionsInTrack, int pa
     this->score = 0;
     this->num_elements = num_el;
     this->size = parallelTracks * sessionsInTrack;
-    this->array = ( Session * ) malloc ( sizeof (Session ) * this->size  );
+    this->array = new Session[this->size](papersInSession);
     for(int i = 0; i < this->size; i++){
         Session tempSession = Session(papersInSession);
         tempSession.num_papers = node_array[i].num_papers;
@@ -117,7 +117,7 @@ void Node::printNode()
     }
 }
 
-void Node::~Node()
+Node::~Node()
 {
-    free(array);
+    delete(array);
 }
