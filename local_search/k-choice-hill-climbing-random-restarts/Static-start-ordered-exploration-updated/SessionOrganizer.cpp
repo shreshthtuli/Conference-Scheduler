@@ -10,7 +10,7 @@
 #include <iostream>
 
 
-#define K_def 10
+#define K_def 0
 
 SessionOrganizer::SessionOrganizer ( )
 {
@@ -81,7 +81,7 @@ double SessionOrganizer::run ( )
     cout << "Shuffled conference \n";
     // conference->printConference();
     cout << "Score : " << scoreOrganization() << "\n" ;
-    while(getSuccessor()){
+    while(getSuccessor1()){
         // conference->printConference();
         cout << "Score : " << scoreOrganization() << "\n" ;
     }
@@ -169,16 +169,15 @@ bool SessionOrganizer::getSuccessor()
 
     this->cur_score = scoreOrganization();
     // Find first index
-    for ( int i = 0; i < conference->getSessionsInTrack ( ); i++ )
+    int x = rand() % conference->getSessionsInTrack();
+    int y = rand() % conference->getParallelTracks();
+    int i,j;
+    for ( int i1 = 0; i1 < conference->getSessionsInTrack ( ); i1++ )
     {
-        currentTime = time(0);
-        if(currentTime < endTime)
+        i = (i1 + x) % conference->getSessionsInTrack();
+        for ( int j1 = 0; j1 < conference->getParallelTracks ( ); j1++ )
         {
-            return false;
-        }
-        //cout << time(0) - startTime << endl;
-        for ( int j = 0; j < conference->getParallelTracks ( ); j++ )
-        {
+            j = (j1 + y) % conference->getParallelTracks();
             for ( int k = 0; k < conference->getPapersInSession ( ); k++ )
             {
                 // Find another index
@@ -186,6 +185,11 @@ bool SessionOrganizer::getSuccessor()
                 {
                     for ( int m = 0; m < conference->getParallelTracks(); m++)
                     {
+                        currentTime = time(0);
+                        if(currentTime > endTime)
+                        {
+                            return false;
+                        }
                         if (l == i && m <= j){
                             // Skip those of same or previous tracks for this session number
                             continue; 
@@ -233,6 +237,59 @@ bool SessionOrganizer::getSuccessor()
         conference->swapPapers(saved_j,saved_i,saved_k, saved_m, saved_l, saved_n);
         return true;
     }
+    // No successor found with better score
+    return false;
+
+}
+
+bool SessionOrganizer::getSuccessor1()
+{
+    this->cur_score = scoreOrganization();
+    // Find first index
+    int x = rand() % conference->getSessionsInTrack();
+    int y = rand() % conference->getParallelTracks();
+    int i,j;
+    for ( int i1 = 0; i1 < conference->getSessionsInTrack ( ); i1++ )
+    {
+        i = (i1 + x) % conference->getSessionsInTrack();
+        for ( int j1 = 0; j1 < conference->getParallelTracks ( ); j1++ )
+        {
+            j = (j1 + y) % conference->getParallelTracks();
+            for ( int k = 0; k < conference->getPapersInSession ( ); k++ )
+            {
+                // Find another index
+                for ( int l = i; l < conference->getSessionsInTrack(); l++)
+                {
+                    for ( int m = 0; m < conference->getParallelTracks(); m++)
+                    {
+                        currentTime = time(0);
+                        if(currentTime > endTime)
+                        {
+                            return false;
+                        }
+                        if (l == i && m <= j){
+                            // Skip those of same or previous tracks for this session number
+                            continue; 
+                        }
+                        for (int n = 0; n < conference->getPapersInSession (); n++)
+                        {
+                            conference->swapPapers(j, i, k, m, l, n);
+                            this->new_score = scoreOrganization();
+                            if (this->new_score > this->cur_score){
+                                // If performance improved return true
+                                return true;
+                            }
+                            else{
+                                // Swap back and continue
+                                conference->swapPapers(j, i, k, m, l, n);
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+
     // No successor found with better score
     return false;
 
