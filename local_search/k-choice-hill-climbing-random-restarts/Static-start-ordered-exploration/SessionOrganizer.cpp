@@ -10,7 +10,7 @@
 #include <ctime>
 #include <iostream>
 
-#define K_def 4
+#define K_def 8
 
 
 SessionOrganizer::SessionOrganizer ( )
