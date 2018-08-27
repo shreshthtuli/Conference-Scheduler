@@ -78,12 +78,12 @@ double SessionOrganizer::run ( )
 {
     conference->shuffle();
     double max = 0;
-    //cout << "Shuffled conference \n";
-    //conference->printConference();
-    //cout << "Score : " << scoreOrganization() << "\n" ;
+    cout << "Shuffled conference \n";
+    // conference->printConference();
+    cout << "Score : " << scoreOrganization() << "\n" ;
     while(getSuccessor()){
-        //conference->printConference();
-        //cout << "Score : " << scoreOrganization() << "\n" ;
+        // conference->printConference();
+        cout << "Score : " << scoreOrganization() << "\n" ;
     }
     max = scoreOrganization();
     return max;
@@ -231,6 +231,7 @@ bool SessionOrganizer::getSuccessor()
 
                 if(flag == 1){
                     conference->swapPapers(j, i, k, saved_m, saved_l, saved_n);
+                    return true;
                 }
 
             }
