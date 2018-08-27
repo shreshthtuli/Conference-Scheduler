@@ -10,7 +10,7 @@
 #include <iostream>
 
 
-#define K_def 50
+#define K_def 10
 
 SessionOrganizer::SessionOrganizer ( )
 {
@@ -195,7 +195,7 @@ bool SessionOrganizer::getSuccessor()
                             conference->swapPapers(j, i, k, m, l, n);
                             this->new_score = scoreOrganization();
                                                         
-                            if (this->new_score > this->cur_score){
+                            if (this->new_score >= this->cur_score){
                                 // If performance improved return true
                                 flag = 1;
                                 count++;

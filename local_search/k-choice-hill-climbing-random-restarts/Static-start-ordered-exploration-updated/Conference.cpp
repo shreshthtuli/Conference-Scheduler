@@ -82,30 +82,13 @@ int Conference::getPapersInSession ( )
 
 Track Conference::getTrack ( int index )
 {
-    if ( index < parallelTracks )
-    {
-        return tracks[index];
-    }
-    else
-    {
-        cout << "Index out of bound - Conference::getTrack" << endl;
-        exit ( 0 );
-    }
+    return tracks[index];
 }
 
 void Conference::setPaper ( int trackIndex, int sessionIndex, int paperIndex, int paperId )
 {
-    if ( this->parallelTracks > trackIndex )
-    {
-        Track curTrack = tracks[trackIndex];
-        curTrack.setPaper ( sessionIndex, paperIndex, paperId );
-    }
-    else
-    {
-        cout << "Index out of bound - Conference::setPaper" << endl;
-        exit ( 0 );
-
-    }
+    Track curTrack = tracks[trackIndex];
+    curTrack.setPaper ( sessionIndex, paperIndex, paperId );
 }
 
 void Conference::swapPapers(int trackIndex1, int sessionIndex1, int paperIndex1, int trackIndex2, int sessionIndex2, int paperIndex2)
