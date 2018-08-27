@@ -42,8 +42,11 @@ SessionOrganizer::SessionOrganizer ( string filename )
 void SessionOrganizer::organizePapers ( )
 {
     double result;
-    while(currentTime - startTime < ((processingTimeInMinutes * 60) - 10)){
+    cout << (double)(time(0)) << endl;
+    cout << endTime << endl;
+    while(currentTime < endTime){
         result = run();
+        cout << time(0) - startTime << endl;
         if (result > global_max){
             global_max = result;
             copyConference();
@@ -75,7 +78,7 @@ double SessionOrganizer::run ( )
     //cout << "Shuffled conference \n";
     //conference->printConference();
     //cout << "Score : " << scoreOrganization() << "\n" ;
-    while(getSuccessor() && currentTime - startTime < ((processingTimeInMinutes * 60) - 10)){
+    while(getSuccessor()){
         //conference->printConference();
         //cout << "Score : " << scoreOrganization() << "\n" ;
     }
@@ -85,9 +88,9 @@ double SessionOrganizer::run ( )
 
 void SessionOrganizer::readInInputFile ( string filename )
 {
+    startTime = time(0);
     vector<string> lines;
     string line;
-    startTime = time(0);
     ifstream myfile ( filename.c_str () );
     if ( myfile.is_open ( ) )
     {
@@ -116,6 +119,7 @@ void SessionOrganizer::readInInputFile ( string filename )
     sessionsInTrack = atoi ( lines[3].c_str () );
     tradeoffCoefficient = atof ( lines[4].c_str () );
 
+    endTime = startTime + ((processingTimeInMinutes * 60) - 1);
     int n = lines.size ( ) - 5;
     double ** tempDistanceMatrix = new double*[n];
     for ( int i = 0; i < n; ++i )
@@ -157,6 +161,12 @@ bool SessionOrganizer::getSuccessor()
     // Find first index
     for ( int i = 0; i < conference->getSessionsInTrack ( ); i++ )
     {
+        currentTime = time(0);
+        if(currentTime < endTime)
+        {
+            return false;
+        }
+        //cout << time(0) - startTime << endl;
         for ( int j = 0; j < conference->getParallelTracks ( ); j++ )
         {
             for ( int k = 0; k < conference->getPapersInSession ( ); k++ )
