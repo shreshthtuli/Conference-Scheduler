@@ -46,7 +46,7 @@ void SessionOrganizer::organizePapers ( )
     cout << endTime << endl;
     while(currentTime < endTime){
         result = run();
-        cout << time(0) - startTime << endl;
+        //cout << time(0) - startTime << endl;
         if (result > global_max){
             global_max = result;
             copyConference();
