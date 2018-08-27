@@ -40,8 +40,8 @@ private:
 
     double global_max;
 
-    double processingTimeInMinutes ;
     double currentTime;
+    double endTime;
     double startTime;
     double tradeoffCoefficient ; // the tradeoff coefficient
     double cur_score;
@@ -49,6 +49,7 @@ private:
 
 
 public:
+    double processingTimeInMinutes ;
     SessionOrganizer();
     SessionOrganizer(string filename);
     
@@ -87,6 +88,7 @@ public:
      * @return true if such successor found, and false otherwise (stop)
      */
     bool getSuccessor();    
+    bool getSuccessor1();    
 
     /**
      * Keep running getSuccessor() till it returns true
