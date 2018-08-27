@@ -10,6 +10,8 @@
         "algorithm": "cpp",
         "limits": "cpp",
         "iostream": "cpp",
-        "string": "cpp"
+        "string": "cpp",
+        "array": "cpp",
+        "utility": "cpp"
     }
 }

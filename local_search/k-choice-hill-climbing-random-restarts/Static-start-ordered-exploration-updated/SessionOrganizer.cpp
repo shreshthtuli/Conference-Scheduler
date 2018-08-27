@@ -10,7 +10,7 @@
 #include <iostream>
 
 
-#define K_def 8
+#define K_def 50
 
 SessionOrganizer::SessionOrganizer ( )
 {
@@ -163,8 +163,8 @@ bool SessionOrganizer::getSuccessor()
     int count = 0; 
     double glob_max = 0.0;
     
-    // int curr_i, curr_j , curr_k;
-    int saved_l, saved_m, saved_n;
+    int saved_i = 0, saved_j = 0 , saved_k = 0;
+    int saved_l = 0, saved_m = 0, saved_n = 0;
     int flag = 0;
 
     this->cur_score = scoreOrganization();
@@ -181,12 +181,7 @@ bool SessionOrganizer::getSuccessor()
         {
             for ( int k = 0; k < conference->getPapersInSession ( ); k++ )
             {
-                count = 0; glob_max = 0.0;
-                saved_l = i; saved_m = j; saved_n = k;
-                flag = 0;
                 // Find another index
-
-
                 for ( int l = i; l < conference->getSessionsInTrack(); l++)
                 {
                     for ( int m = 0; m < conference->getParallelTracks(); m++)
@@ -206,15 +201,16 @@ bool SessionOrganizer::getSuccessor()
                                 count++;
                                 if(this->new_score > glob_max){
                                     glob_max = this->new_score;
-                                    saved_l = l; saved_m = m; saved_n = n;
+                                    saved_i = i; saved_j = j; saved_k = k;
+                                    saved_l = l; saved_m = m; saved_n = n;                                    
                                 }
-                                //what if we don't get k max?
+                                //what if we don't get k greator symbols?
                                 if(count > K_def){
                                     //restore config
                                     conference->swapPapers(j, i, k, m, l, n);
 
                                     //swap to the saved thing
-                                    conference->swapPapers(j, i, k, saved_m, saved_l, saved_n);
+                                    conference->swapPapers(saved_j,saved_i,saved_k, saved_m, saved_l, saved_n);
                                     return true;
                                 }
 
@@ -229,15 +225,14 @@ bool SessionOrganizer::getSuccessor()
                     }
                 }
 
-                if(flag == 1){
-                    conference->swapPapers(j, i, k, saved_m, saved_l, saved_n);
-                    return true;
-                }
-
             }
         }
     }
 
+    if(flag == 1){
+        conference->swapPapers(saved_j,saved_i,saved_k, saved_m, saved_l, saved_n);
+        return true;
+    }
     // No successor found with better score
     return false;
 
