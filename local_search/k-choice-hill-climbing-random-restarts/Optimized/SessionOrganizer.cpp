@@ -163,7 +163,7 @@ double SessionOrganizer::run ( )
 
     bool b ;
 
-    while(getSuccessor(k_param, true)){
+    while(getSuccessor(0, true)){
         double cscore = scoreOrganization();
         cout << "Score : " << cscore << "\n" ;
         if (cscore > global_max){
