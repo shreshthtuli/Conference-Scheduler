@@ -8,9 +8,12 @@
 #include "Util.h"
 #include <ctime>
 #include <iostream>
+#include <algorithm> 
+#include <list>
 
 
 #define K_def 0
+
 
 SessionOrganizer::SessionOrganizer ( )
 {
@@ -28,25 +31,73 @@ SessionOrganizer::SessionOrganizer ( string filename )
     conference = new Conference ( parallelTracks, sessionsInTrack, papersInSession );
     best_conference = new Conference (parallelTracks, sessionsInTrack, papersInSession);
     int counter = 0;
-    for ( int i = 0; i < best_conference->getSessionsInTrack ( ); i++ )
+    // for ( int i = 0; i < best_conference->getSessionsInTrack ( ); i++ )
+    // {
+    //     for ( int j = 0; j < best_conference->getParallelTracks ( ); j++ )
+    //     {
+    //         for ( int k = 0; k < best_conference->getPapersInSession ( ); k++ )
+    //         {
+    //             conference->setPaper ( j, i, k, counter++ );
+    //         }
+    //     }
+    // }
+    initializeConference();
+
+    conference->printConference();
+    cout << "Start score : " << scoreOrganization() << "\n";
+}
+
+void SessionOrganizer::initializeConference()
+{
+    list<int> remainingPapers;
+    Paper *distances = new Paper[conference->n];
+    for(int i = 0; i < conference->n; i++)
     {
-        for ( int j = 0; j < best_conference->getParallelTracks ( ); j++ )
+        remainingPapers.push_back(i);
+    }
+    for (auto v : remainingPapers)
+        cout << v << " ";
+    cout << endl;
+
+    for(int i = 0; i < conference->sessionsInTrack; i++)
+    {
+        for(int j = 0; j < conference->parallelTracks; j++)
         {
-            for ( int k = 0; k < best_conference->getPapersInSession ( ); k++ )
+            int num = remainingPapers.front();
+            remainingPapers.pop_front();
+            cout << "Chosen index : " << num << endl;
+            for(int k = 0; k < conference->n; k++)
             {
-                conference->setPaper ( j, i, k, counter++ );
+                distances[k].distance = distanceMatrix[num][k];
+                distances[k].id = k;
+            }
+            sort(distances, distances+conference->n, paperComparator);
+            for(int k = 0; k < conference->papersInSession; k++)
+            {
+                int index;
+                for(int counter = 0; counter < conference->n; counter++){
+                    index = distances[counter].id;
+                    if(std::find(remainingPapers.begin(), remainingPapers.end(), index) != remainingPapers.end()){
+                        index = counter; break;
+                    }
+                }
+                cout << "Set Paper : " << i << " " << j << " " << k << " : " << index << endl; 
+                remainingPapers.remove(index);
+                for (auto v : remainingPapers)
+                    cout << v << " ";
+                cout << endl;
+                conference->setPaper(j,i,k, index);
             }
         }
     }
-    conference->printConference();
-    cout << "Start score : " << scoreOrganization() << "\n";
+    
 }
 
 void SessionOrganizer::organizePapers ( )
 {
     double result;
-    cout << (double)(time(0)) << endl;
-    cout << endTime << endl;
+    // cout << (double)(time(0)) << endl;
+    // cout << endTime << endl;
     while(currentTime < endTime){
         result = run();
         // cout << time(0) - startTime << endl;
@@ -74,9 +125,25 @@ void SessionOrganizer::copyConference(){
     }
 }
 
+
+void SessionOrganizer::reverseCopyConference(){
+
+    int paperId;
+    for ( int i = 0; i < best_conference->getSessionsInTrack ( ); i++ )
+    {
+        for ( int j = 0; j < best_conference->getParallelTracks ( ); j++ )
+        {
+            for ( int k = 0; k < best_conference->getPapersInSession ( ); k++ )
+            {
+                paperId = best_conference->getTrack(j).getSession(i).getPaper(k);
+                conference->setPaper ( j, i, k, paperId );
+            }
+        }
+    }
+}
+
 double SessionOrganizer::run ( )
 {
-    conference->shuffle();
     double max = 0;
     cout << "Shuffled conference \n";
     // conference->printConference();
@@ -86,6 +153,7 @@ double SessionOrganizer::run ( )
         cout << "Score : " << scoreOrganization() << "\n" ;
     }
     max = scoreOrganization();
+    conference->shuffle();
     return max;
 }
 

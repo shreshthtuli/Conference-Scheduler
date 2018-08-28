@@ -52,6 +52,18 @@ public:
     double processingTimeInMinutes ;
     SessionOrganizer();
     SessionOrganizer(string filename);
+
+    void initializeConference();
+
+    struct Paper{
+        int id;
+        int distance;
+    };
+
+    bool paperComparator(Paper a, Paper b)
+    {
+        return a.distance > b.distance;
+    }
     
     
     /**
@@ -100,6 +112,7 @@ public:
      * Copies confernce to best_conference
      */
     void copyConference();
+    void reverseCopyConference();
     
     void printSessionOrganiser(char *);
 };
