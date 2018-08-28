@@ -60,7 +60,7 @@ public:
         int distance;
     };
 
-    bool paperComparator(Paper a, Paper b)
+    static bool paperComparator(Paper a, Paper b)
     {
         return a.distance > b.distance;
     }
