@@ -57,14 +57,25 @@ public:
 
     struct Paper{
         int id;
-        int distance;
+        double distance;
+        // bool operator<(const Paper& rhs) const{
+        //     return distance > rhs.distance;
+        // }
     };
 
-    static bool paperComparator(Paper a, Paper b)
-    {
-        return a.distance > b.distance;
-    }
+    // static bool paperComparator(Paper a, Paper b)
+    // {
+    //     return a.distance > b.distance;
+    // }
     
+    class paperComparator
+    {
+        public:
+        bool operator() (Paper p1, Paper p2)
+        {
+            return p1.distance > p2.distance;
+        }
+    };
     
     /**
      * Read in the number of parallel tracks, papers in session, sessions
