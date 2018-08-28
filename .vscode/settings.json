@@ -12,6 +12,8 @@
         "iostream": "cpp",
         "string": "cpp",
         "array": "cpp",
-        "utility": "cpp"
+        "utility": "cpp",
+        "*.tcc": "cpp",
+        "list": "cpp"
     }
 }
