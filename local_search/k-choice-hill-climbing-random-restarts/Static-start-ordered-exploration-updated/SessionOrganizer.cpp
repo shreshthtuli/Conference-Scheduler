@@ -10,7 +10,7 @@
 #include <iostream>
 
 
-#define K_def 0
+#define K_def 10
 
 SessionOrganizer::SessionOrganizer ( )
 {
@@ -81,7 +81,7 @@ double SessionOrganizer::run ( )
     cout << "Shuffled conference \n";
     // conference->printConference();
     cout << "Score : " << scoreOrganization() << "\n" ;
-    while(getSuccessor1()){
+    while(getSuccessor()){
         // conference->printConference();
         cout << "Score : " << scoreOrganization() << "\n" ;
     }
