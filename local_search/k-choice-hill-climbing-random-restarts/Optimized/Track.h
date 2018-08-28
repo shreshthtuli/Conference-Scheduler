@@ -20,9 +20,10 @@
 
 class Track {
 private:
-    Session *sessions;
+    
     int sessionsInTrack;
 public:
+    Session *sessions;
     Track();
     
     /**

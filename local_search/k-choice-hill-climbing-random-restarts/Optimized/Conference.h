@@ -16,9 +16,6 @@ using namespace std;
 
 class Conference {
 private:
-    // The array of tracks.
-    Track *tracks;
-
     // Paper IDs used for swap
     int paper1;
     int paper2;
@@ -27,6 +24,8 @@ private:
     int *shuffled_array;
 
 public:
+    // The array of tracks.
+    Track *tracks;
     int n;
     // The number of parallel tracks.
     int parallelTracks;

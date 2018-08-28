@@ -47,6 +47,8 @@ private:
     double tradeoffCoefficient ; // the tradeoff coefficient
     double cur_score;
     double new_score;
+    int saved_i = 0, saved_j = 0 , saved_k = 0;
+    int saved_l = 0, saved_m = 0, saved_n = 0;
 
 
 public:

@@ -119,13 +119,13 @@ void SessionOrganizer::organizePapers ( )
 void SessionOrganizer::copyConference(){
 
     int paperId;
-    for ( int i = 0; i < best_conference->getSessionsInTrack ( ); i++ )
+    for ( int i = 0; i < best_conference->sessionsInTrack; i++ )
     {
-        for ( int j = 0; j < best_conference->getParallelTracks ( ); j++ )
+        for ( int j = 0; j < best_conference->parallelTracks; j++ )
         {
-            for ( int k = 0; k < best_conference->getPapersInSession ( ); k++ )
+            for ( int k = 0; k < best_conference->papersInSession; k++ )
             {
-                paperId = conference->getTrack(j).getSession(i).getPaper(k);
+                paperId = conference->tracks[j].sessions[i].papers[k];
                 best_conference->setPaper ( j, i, k, paperId );
             }
         }
@@ -162,13 +162,19 @@ double SessionOrganizer::run ( )
     int curr_index = 0;
 
     bool b ;
+    bool first_done = false;
 
     while(getSuccessor(0, true)){
         double cscore = scoreOrganization();
         cout << "Score : " << cscore << "\n" ;
         if (cscore > global_max){
             global_max = cscore;
-            copyConference();
+            if(first_done){
+                best_conference->swapPapers(saved_j,saved_i,saved_k, saved_m, saved_l, saved_n);
+            }
+            else{
+                copyConference();
+            }
         }
     }
 
@@ -290,8 +296,8 @@ bool SessionOrganizer::getSuccessor(int K_dyn, bool integerscore)
     int count = 0; 
     double glob_max = 0.0;
     
-    int saved_i = 0, saved_j = 0 , saved_k = 0;
-    int saved_l = 0, saved_m = 0, saved_n = 0;
+    saved_i = 0; saved_j = 0 ; saved_k = 0;
+    saved_l = 0; saved_m = 0; saved_n = 0;
     bool flag = false;
 
     if(integerscore){
