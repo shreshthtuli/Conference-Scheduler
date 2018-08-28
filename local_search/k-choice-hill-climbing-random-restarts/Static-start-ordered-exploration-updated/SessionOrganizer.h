@@ -110,9 +110,10 @@ public:
      * Move to better sucessor based on First choice Hill Climbing
      * @return true if such successor found, and false otherwise (stop)
      */
-    bool getSuccessor();    
+    bool getSuccessor(int k_dy);    
     bool getSuccessor1();    
 
+    double getWeightedAvg(double * a, int idx);
     /**
      * Keep running getSuccessor() till it returns true
      * When it returns false, return max score

@@ -13,9 +13,6 @@
 #include <queue>
 
 
-#define K_def 5
-
-
 SessionOrganizer::SessionOrganizer ( )
 {
     parallelTracks = 0;
@@ -157,18 +154,60 @@ double SessionOrganizer::run ( )
     cout << "Shuffled conference \n";
     // conference->printConference();
     cout << "Score : " << scoreOrganization() << "\n" ;
-    while(getSuccessor()){
-        // conference->printConference();
+
+    int k_param = 5;
+    double improvement = 0.0 ;
+    double last_scores[5];
+    int curr_index = 0;
+
+    bool b ;
+
+    for( int iter_num = 0; ; iter_num++){
+        b = getSuccessor(k_param);
+        if(b == false){
+            break;
+        }
         float cscore = scoreOrganization();
+        curr_index = iter_num % 5;
+        last_scores[curr_index] = cscore;
         cout << "Score : " << cscore << "\n" ;
         if (cscore > global_max){
             global_max = cscore;
             copyConference();
         }
+        if( (iter_num > 5) && (iter_num % 50 == 0)){
+            improvement = abs(cscore - getWeightedAvg(last_scores, curr_index));
+            cout << iter_num << " : " << k_param << endl;
+            if(improvement < (0.0005 * cscore)){
+                k_param = k_param >= 1 ? k_param -1 : 0 ;
+            }
+        }
     }
+
+    // while(getSuccessor(5)){
+    //     // conference->printConference();
+    //     float cscore = scoreOrganization();
+    //     cout << "Score : " << cscore << "\n" ;
+    //     if (cscore > global_max){
+    //         global_max = cscore;
+    //         copyConference();
+    //     }
+    // }
+
     max = scoreOrganization();
     conference->shuffle();
     return max;
+}
+
+double SessionOrganizer::getWeightedAvg(double * a, int idx){
+    
+    double sum =  0.0;
+    // 4 iterations
+    for(int i = 1; i < 5; i++){
+        sum += (a[(idx+i)%5])*(i);
+    }
+    // sum /= 10;
+    return (sum/10.0);
 }
 
 void SessionOrganizer::readInInputFile ( string filename )
@@ -240,7 +279,7 @@ double** SessionOrganizer::getDistanceMatrix ( )
     return distanceMatrix;
 }
 
-bool SessionOrganizer::getSuccessor()
+bool SessionOrganizer::getSuccessor(int K_dyn)
 {
     int count = 0; 
     double glob_max = 0.0;
@@ -291,7 +330,7 @@ bool SessionOrganizer::getSuccessor()
                                     saved_l = l; saved_m = m; saved_n = n;                                    
                                 }
                                 //what if we don't get k greator symbols?
-                                if(count > K_def){
+                                if(count > K_dyn){
                                     //restore config
                                     conference->swapPapers(j, i, k, m, l, n);
 
