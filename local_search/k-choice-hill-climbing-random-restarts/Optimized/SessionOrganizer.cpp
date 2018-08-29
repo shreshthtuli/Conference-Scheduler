@@ -47,24 +47,24 @@ SessionOrganizer::SessionOrganizer ( string filename )
     //     }
     // }
     
-    for(int i = 0; i < conference->n; i++)
-    {
-        for(int j = 0; j < conference->n; j++)
-        {
-            cout << distanceMatrix[i][j] << " ";
-        }
-        cout << endl;
-    }
-    cout << endl;
+    // for(int i = 0; i < conference->n; i++)
+    // {
+    //     for(int j = 0; j < conference->n; j++)
+    //     {
+    //         cout << distanceMatrix[i][j] << " ";
+    //     }
+    //     cout << endl;
+    // }
+    // cout << endl;
 
-    for(int i = 0; i < conference->n; i++)
-    {
-        for(int j = 0; j < conference->n; j++)
-        {
-            cout << distanceMatrixInt[i][j] << " ";
-        }
-        cout << endl;
-    }
+    // for(int i = 0; i < conference->n; i++)
+    // {
+    //     for(int j = 0; j < conference->n; j++)
+    //     {
+    //         cout << distanceMatrixInt[i][j] << " ";
+    //     }
+    //     cout << endl;
+    // }
 
 
     conference->printConference();
@@ -184,10 +184,10 @@ double SessionOrganizer::run ( )
     // }
 
 
-    k_param = n > 300 ? 10 : 4;
+    k_param = n > 300 ? 25 : 4;
 
     for( ; ; iter_num++){
-        b = getSuccessorRand(k_param, n);
+        b = getSuccessorRand(k_param, 5*n);
         if(b == false){
             break;
         }
