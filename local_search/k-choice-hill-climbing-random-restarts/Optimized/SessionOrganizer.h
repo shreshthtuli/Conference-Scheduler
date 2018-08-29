@@ -11,6 +11,7 @@
 #include <iostream>
 #include <fstream>
 #include <vector>
+#include <unordered_set>
 
 
 #include "Conference.h"
@@ -31,6 +32,8 @@ class SessionOrganizer {
 private:
     double ** distanceMatrix;
     unsigned short ** distanceMatrixInt;
+    unordered_set<string> stringSet;
+    int total_neighbours;
 
     int parallelTracks ;
     int papersInSession ;
@@ -108,6 +111,7 @@ public:
      */
     bool getSuccessor(int k_dy, bool integerscore);    
     bool getSuccessor1();    
+    bool getSuccessorRand();    
 
     double getWeightedAvg(double * a, int idx);
     /**

@@ -162,19 +162,20 @@ double SessionOrganizer::run ( )
     int curr_index = 0;
 
     bool b ;
-    bool first_done = false;
+
+    while(getSuccessorRand()){
+        cout << "Score : " << this->cur_score << "\n" ;
+        if (this->cur_score > global_max){
+            global_max = this->cur_score;
+            copyConference();
+        }
+    }
 
     while(getSuccessor(0, true)){
-        double cscore = scoreOrganization();
-        cout << "Score : " << cscore << "\n" ;
-        if (cscore > global_max){
-            global_max = cscore;
-            if(first_done){
-                best_conference->swapPapers(saved_j,saved_i,saved_k, saved_m, saved_l, saved_n);
-            }
-            else{
-                copyConference();
-            }
+        cout << "Score : " << this->cur_score << "\n" ;
+        if (this->cur_score > global_max){
+            global_max = this->cur_score;
+            copyConference();
         }
     }
 
@@ -250,6 +251,8 @@ void SessionOrganizer::readInInputFile ( string filename )
     parallelTracks = atoi ( lines[2].c_str () );
     sessionsInTrack = atoi ( lines[3].c_str () );
     tradeoffCoefficient = atof ( lines[4].c_str () );
+    total_neighbours = papersInSession * sessionsInTrack * parallelTracks * (parallelTracks * sessionsInTrack - 1) * papersInSession / 2;
+    
 
     endTime = startTime + ((processingTimeInMinutes * 60) - 1);
     int n = lines.size ( ) - 5;
@@ -307,26 +310,26 @@ bool SessionOrganizer::getSuccessor(int K_dyn, bool integerscore)
         this->cur_score = scoreOrganization();
     }
     // Find first index
-    int x = rand() % conference->getSessionsInTrack();
-    int y = rand() % conference->getParallelTracks();
+    int x = rand() % conference->sessionsInTrack;
+    int y = rand() % conference->parallelTracks;
     int i,j;
-    for ( int i1 = 0; i1 < conference->getSessionsInTrack ( ); i1++ )
+    for ( int i1 = 0; i1 < conference->sessionsInTrack; i1++ )
     {
-        i = (i1 + x) % conference->getSessionsInTrack();
-        for ( int j1 = 0; j1 < conference->getParallelTracks ( ); j1++ )
+        i = (i1 + x) % conference->sessionsInTrack;
+        for ( int j1 = 0; j1 < conference->parallelTracks; j1++ )
         {
-            j = (j1 + y) % conference->getParallelTracks();
-            for ( int k = 0; k < conference->getPapersInSession ( ); k++ )
+            j = (j1 + y) % conference->parallelTracks;
+            for ( int k = 0; k < conference->papersInSession; k++ )
             {
                 // Find another index
-                for ( int l = i; l < conference->getSessionsInTrack(); l++)
+                for ( int l = i; l < conference->sessionsInTrack; l++)
                 {
-                    for ( int m = 0; m < conference->getParallelTracks(); m++)
+                    for ( int m = j+1; m < conference->parallelTracks; m++)
                     {
-                        if (l == i && m <= j){
-                            // Skip those of same or previous tracks for this session number
-                            continue; 
-                        }
+                        // if (l == i && m <= j){
+                        //     // Skip those of same or previous tracks for this session number
+                        //     continue; 
+                        // }
                         currentTime = time(0);
                         if(currentTime > endTime)
                         {
@@ -429,6 +432,57 @@ bool SessionOrganizer::getSuccessor1()
                     }
                 }
             }
+        }
+    }
+
+    // No successor found with better score
+    return false;
+
+}
+
+
+bool SessionOrganizer::getSuccessorRand()
+{
+    this->cur_score = scoreOrganization();
+    stringSet.clear();
+    int i,j,k,l,m,n;
+    int counter = 0;
+    while(counter < total_neighbours){
+        currentTime = time(0);
+        if(currentTime > endTime)
+        {
+            return false;
+        }
+        while(true)
+        {
+            i = rand() % conference->getSessionsInTrack ( );
+            l = rand() % conference->getSessionsInTrack ( );
+            j = rand() % conference->getParallelTracks ( );
+            m = rand() % conference->getParallelTracks ( );
+            if(i!=l || j!=m){
+                break;
+            }
+        }
+        k = rand() % conference->getPapersInSession();
+        n = rand() % conference->getPapersInSession();
+
+        if(stringSet.find(to_string(i)+to_string(j)+to_string(k)+to_string(l)+to_string(m)+to_string(n))!=stringSet.end() 
+        || stringSet.find(to_string(l)+to_string(m)+to_string(n)+to_string(i)+to_string(j)+to_string(k))!=stringSet.end())
+        {
+            continue;
+        }
+
+        counter++;
+        stringSet.insert(to_string(i)+to_string(j)+to_string(k)+to_string(l)+to_string(m)+to_string(n));
+        conference->swapPapers(j, i, k, m, l, n);
+        this->new_score = scoreOrganization();
+        if (this->new_score > this->cur_score){
+            // If performance improved return true
+            return true;
+        }
+        else{
+            // Swap back and continue
+            conference->swapPapers(j, i, k, m, l, n);
         }
     }
 
