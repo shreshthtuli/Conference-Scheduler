@@ -156,7 +156,7 @@ double SessionOrganizer::run ( )
     // conference->printConference();
     cout << "Score : " << scoreOrganization() << "\n" ;
 
-    int k_param = 4;
+    int k_param;
     double improvement = 0.0 ;
     double last_scores[5];
     int curr_index = 0;
@@ -171,8 +171,12 @@ double SessionOrganizer::run ( )
     //         copyConference();
     //     }
     // }
+
+
+    k_param = n > 300 ? 10 : 4;
+
     for( ; ; iter_num++){
-        b = getSuccessorRand(k_param, 1000);
+        b = getSuccessorRand(k_param, n);
         if(b == false){
             break;
         }
@@ -314,7 +318,7 @@ void SessionOrganizer::readInInputFile ( string filename )
     sessionsInTrack = atoi ( lines[3].c_str () );
     tradeoffCoefficient = atof ( lines[4].c_str () );
     total_neighbours = papersInSession * sessionsInTrack * parallelTracks * (parallelTracks * sessionsInTrack - 1) * papersInSession / 2;
-    
+    n = papersInSession * parallelTracks * sessionsInTrack;
 
     endTime = startTime + ((processingTimeInMinutes * 60) - 1);
     int n = lines.size ( ) - 5;
@@ -508,7 +512,7 @@ bool SessionOrganizer::getSuccessorRand(int k_def, int limit)
     this->cur_score = scoreOrganizationInt();
     int i,j,k,l,m,n;
     int counter = 0;
-    while(counter < limit){
+    while(counter++ < limit){
         currentTime = time(0);
         if(currentTime > endTime)
         {

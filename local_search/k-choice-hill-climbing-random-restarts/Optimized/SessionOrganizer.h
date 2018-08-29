@@ -38,6 +38,7 @@ private:
     int parallelTracks ;
     int papersInSession ;
     int sessionsInTrack ;
+    int n;
 
     Conference *conference;
     Conference *best_conference;
