@@ -156,7 +156,7 @@ double SessionOrganizer::run ( )
     // conference->printConference();
     cout << "Score : " << scoreOrganization() << "\n" ;
 
-    int k_param = 5;
+    int k_param = 4;
     double improvement = 0.0 ;
     double last_scores[5];
     int curr_index = 0;
@@ -164,12 +164,6 @@ double SessionOrganizer::run ( )
     bool b ;
     int iter_num = 0;
 
-<<<<<<< HEAD
-    while(getSuccessorRand(0, 1000)){
-        cout << "Score : " << this->cur_score << "\n" ;
-        if (this->cur_score > global_max){
-            global_max = this->cur_score;
-=======
     // while(getSuccessorRand()){
     //     cout << "Score : " << this->cur_score << "\n" ;
     //     if (this->cur_score > global_max){
@@ -178,7 +172,7 @@ double SessionOrganizer::run ( )
     //     }
     // }
     for( ; ; iter_num++){
-        b = getSuccessorRand(1000);
+        b = getSuccessorRand(k_param, 1000);
         if(b == false){
             break;
         }
@@ -188,21 +182,23 @@ double SessionOrganizer::run ( )
         cout << "Score : " << cscore << "\n" ;
         if (cscore > global_max){
             global_max = cscore;
->>>>>>> 07fb47541ee1a5e7deb9c8cab740597384994803
             copyConference();
         }
         if(  (iter_num % 50 == 0) && (iter_num > 5)  ){
             improvement = abs(cscore - getWeightedAvg(last_scores, curr_index));
-            cout << iter_num << " : " << k_param << endl;
-            if(improvement < (0.0001 * cscore)){
+            cout << iter_num << " : " << k_param<< " : " << improvement << " : Thesh : " << 0.00025 * cscore << endl;
+            if(improvement < (0.00025 * cscore)){
                 // k_param = k_param >= 1 ? k_param -1 : 0 ;
-                break;
+                k_param = k_param >= 1 ? k_param -1 : 0 ;
+                if(k_param == 0){
+                    break;
+                }
             }
         }
     }
 
     cout << "RANDOM K SHORT maximization complete" << endl;
-    k_param = 10;
+    k_param = 2;
 
 
     for( ; ; iter_num++){
@@ -220,8 +216,9 @@ double SessionOrganizer::run ( )
         }
         if( (iter_num % 50 == 0) && (iter_num > 5)  ){
             improvement = abs(cscore - getWeightedAvg(last_scores, curr_index));
-            cout << iter_num << " : " << k_param << endl;
-            if(improvement < (0.00005 * cscore)){
+            cout << iter_num << " : " << k_param<< " : " << improvement << " : Thesh : " << 0.0009 * cscore << endl;
+            
+            if(improvement < (0.0009 * cscore)){
                 k_param = k_param >= 1 ? k_param -1 : 0 ;
                 if(k_param == 0){
                     break;
@@ -230,7 +227,7 @@ double SessionOrganizer::run ( )
         }
     }
 
-    k_param = 10;
+    k_param = 2;
     // while(getSuccessor(0, true)){
     //     cout << "Score : " << this->cur_score << "\n" ;
     //     if (this->cur_score > global_max){
@@ -256,8 +253,10 @@ double SessionOrganizer::run ( )
         }
         if( (iter_num % 50 == 0) && (iter_num > 5) ){
             improvement = abs(cscore - getWeightedAvg(last_scores, curr_index));
-            cout << iter_num << " : " << k_param << endl;
-            if(improvement < (0.0005 * cscore)){
+
+            cout << iter_num << " : " << k_param<< " : " << improvement << " : Thesh : " << 0.005 * cscore << endl;
+            
+            if(improvement < (0.005 * cscore)){
                 k_param = k_param >= 1 ? k_param -1 : 0 ;
             }
         }
