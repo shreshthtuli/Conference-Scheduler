@@ -11,6 +11,7 @@
 #include <iostream>
 #include <fstream>
 #include <vector>
+#include <unordered_set>
 
 
 #include "Conference.h"
@@ -30,10 +31,14 @@ using namespace std;
 class SessionOrganizer {
 private:
     double ** distanceMatrix;
+    unsigned short ** distanceMatrixInt;
+    unordered_set<string> stringSet;
+    int total_neighbours;
 
     int parallelTracks ;
     int papersInSession ;
     int sessionsInTrack ;
+    int n;
 
     Conference *conference;
     Conference *best_conference;
@@ -46,13 +51,30 @@ private:
     double tradeoffCoefficient ; // the tradeoff coefficient
     double cur_score;
     double new_score;
+    int saved_i = 0, saved_j = 0 , saved_k = 0;
+    int saved_l = 0, saved_m = 0, saved_n = 0;
 
 
 public:
     double processingTimeInMinutes ;
     SessionOrganizer();
     SessionOrganizer(string filename);
+
+    void initializeConference();
+
+    struct Paper{
+        int id;
+        double distance;
+    };
     
+    class paperComparator
+    {
+        public:
+        bool operator() (Paper p1, Paper p2)
+        {
+            return p1.distance > p2.distance;
+        }
+    };
     
     /**
      * Read in the number of parallel tracks, papers in session, sessions
@@ -82,14 +104,17 @@ public:
      * @return the score.
      */
     double scoreOrganization();
+    double scoreOrganizationInt();
 
     /**
      * Move to better sucessor based on First choice Hill Climbing
      * @return true if such successor found, and false otherwise (stop)
      */
-    bool getSuccessor();    
+    bool getSuccessor(int k_dy, bool integerscore);    
     bool getSuccessor1();    
+    bool getSuccessorRand(int k, int limit);    
 
+    double getWeightedAvg(double * a, int idx);
     /**
      * Keep running getSuccessor() till it returns true
      * When it returns false, return max score
@@ -100,6 +125,7 @@ public:
      * Copies confernce to best_conference
      */
     void copyConference();
+    void reverseCopyConference();
     
     void printSessionOrganiser(char *);
 };
