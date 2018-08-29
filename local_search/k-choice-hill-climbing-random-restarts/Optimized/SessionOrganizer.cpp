@@ -182,7 +182,7 @@ double SessionOrganizer::run ( )
         if(b == false){
             break;
         }
-        double cscore = this->cur_score;
+        double cscore = scoreOrganization();
         curr_index = iter_num % 5;
         last_scores[curr_index] = cscore;
         cout << "Score : " << cscore << "\n" ;
@@ -213,7 +213,7 @@ double SessionOrganizer::run ( )
             cout << scoreOrganization() << endl;
             break;
         }
-        double cscore = this->cur_score;
+        double cscore = scoreOrganization();
         curr_index = iter_num % 5;
         last_scores[curr_index] = cscore;
         cout << "Score : " << cscore << "\n" ;
@@ -251,7 +251,7 @@ double SessionOrganizer::run ( )
             cout << scoreOrganization() << endl;
             break;
         }
-        double cscore = this->cur_score;
+        double cscore = scoreOrganization();
         curr_index = iter_num % 5;
         last_scores[curr_index] = cscore;
         cout << "Score : " << cscore << "\n" ;
