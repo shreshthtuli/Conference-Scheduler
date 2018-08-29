@@ -156,7 +156,7 @@ double SessionOrganizer::run ( )
     // conference->printConference();
     cout << "Score : " << scoreOrganization() << "\n" ;
 
-    int k_param = 4;
+    int k_param ;
     double improvement = 0.0 ;
     double last_scores[5];
     int curr_index = 0;
@@ -171,6 +171,10 @@ double SessionOrganizer::run ( )
     //         copyConference();
     //     }
     // }
+
+
+    k_param = this->n > 300? 10 : 4;
+
     for( ; ; iter_num++){
         b = getSuccessorRand(k_param, 1000);
         if(b == false){
