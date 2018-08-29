@@ -1,1 +1,1 @@
-make opt
+g++ -O3 -std=c++11 -o main main.cpp Track.cpp Session.cpp Conference.cpp SessionOrganizer.cpp

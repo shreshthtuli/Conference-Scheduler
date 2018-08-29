@@ -67,8 +67,8 @@ SessionOrganizer::SessionOrganizer ( string filename )
     // }
 
 
-    conference->printConference();
-    // cout << "Start score : " << scoreOrganization() << "\n";
+    // conference->printConference();
+    cout << "Start score : " << scoreOrganization() << "\n";
     // exit(0);
 }
 
@@ -175,15 +175,6 @@ double SessionOrganizer::run ( )
     bool b ;
     int iter_num = 0;
 
-    // while(getSuccessorRand()){
-    //     cout << "Score : " << this->cur_score << "\n" ;
-    //     if (this->cur_score > global_max){
-    //         global_max = this->cur_score;
-    //         copyConference();
-    //     }
-    // }
-
-
     k_param = n > 300 ? 25 : 4;
 
     for( ; ; iter_num++){
@@ -191,7 +182,7 @@ double SessionOrganizer::run ( )
         if(b == false){
             break;
         }
-        double cscore = this->cur_score;
+        double cscore = scoreOrganization();
         curr_index = iter_num % 5;
         last_scores[curr_index] = cscore;
         // cout << "Score : " << cscore << "\n" ;
@@ -219,9 +210,10 @@ double SessionOrganizer::run ( )
     for( ; ; iter_num++){
         b = getSuccessor(k_param, true);
         if(b == false){
+            // cout << scoreOrganization() << endl;
             break;
         }
-        double cscore = this->cur_score;
+        double cscore = scoreOrganization();
         curr_index = iter_num % 5;
         last_scores[curr_index] = cscore;
         // cout << "Score : " << cscore << "\n" ;
@@ -256,9 +248,10 @@ double SessionOrganizer::run ( )
     for( ; ; iter_num++){
         b = getSuccessor(k_param, false);
         if(b == false){
+            // cout << scoreOrganization() << endl;
             break;
         }
-        double cscore = this->cur_score;
+        double cscore = scoreOrganization();
         curr_index = iter_num % 5;
         last_scores[curr_index] = cscore;
         // cout << "Score : " << cscore << "\n" ;
@@ -313,13 +306,13 @@ void SessionOrganizer::readInInputFile ( string filename )
     }
     else
     {
-        cout << "Unable to open input file";
+        // cout << "Unable to open input file";
         exit ( 0 );
     }
 
     if ( 6 > lines.size ( ) )
     {
-        cout << "Not enough information given, check format of input file";
+        // cout << "Not enough information given, check format of input file";
         exit ( 0 );
     }
 
@@ -361,7 +354,7 @@ void SessionOrganizer::readInInputFile ( string filename )
     int slots = parallelTracks * papersInSession*sessionsInTrack;
     if ( slots != numberOfPapers )
     {
-        cout << "More papers than slots available! slots:" << slots << " num papers:" << numberOfPapers << endl;
+        // cout << "More papers than slots available! slots:" << slots << " num papers:" << numberOfPapers << endl;
         exit ( 0 );
     }
 }
@@ -563,7 +556,7 @@ void SessionOrganizer::printSessionOrganiser ( char * filename)
 {
     best_conference->printConference ( filename);
     conference = best_conference;
-    cout << "Best score : " << scoreOrganization() << " \n";
+    // cout << "Best score : " << scoreOrganization() << " \n";
 }
 
 double SessionOrganizer::scoreOrganization ( )
@@ -634,7 +627,12 @@ double SessionOrganizer::scoreOrganizationInt ()
                 for ( int l = k + 1; l < tmpSession.getNumberOfPapers ( ); l++ )
                 {
                     int index2 = tmpSession.getPaper ( l );
-                    score1 += 10 - distanceMatrixInt[index1][index2];
+                    if(distanceMatrixInt[index1][index2] <=  9)
+                    {
+                        score1 = score1 + 9 - distanceMatrixInt[index1][index2];
+                    }
+                    // else{
+                    // }
                 }
             }
         }

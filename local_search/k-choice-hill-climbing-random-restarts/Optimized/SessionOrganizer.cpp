@@ -627,13 +627,12 @@ double SessionOrganizer::scoreOrganizationInt ()
                 for ( int l = k + 1; l < tmpSession.getNumberOfPapers ( ); l++ )
                 {
                     int index2 = tmpSession.getPaper ( l );
-                    if(distanceMatrixInt[index1][index2] > 9)
+                    if(distanceMatrixInt[index1][index2] <=  9)
                     {
-                        score1 = 0;
-                    }
-                    else{
                         score1 = score1 + 9 - distanceMatrixInt[index1][index2];
                     }
+                    // else{
+                    // }
                 }
             }
         }
