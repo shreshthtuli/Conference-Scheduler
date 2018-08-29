@@ -162,26 +162,86 @@ double SessionOrganizer::run ( )
     int curr_index = 0;
 
     bool b ;
+    int iter_num = 0;
 
+<<<<<<< HEAD
     while(getSuccessorRand(0, 1000)){
         cout << "Score : " << this->cur_score << "\n" ;
         if (this->cur_score > global_max){
             global_max = this->cur_score;
+=======
+    // while(getSuccessorRand()){
+    //     cout << "Score : " << this->cur_score << "\n" ;
+    //     if (this->cur_score > global_max){
+    //         global_max = this->cur_score;
+    //         copyConference();
+    //     }
+    // }
+    for( ; ; iter_num++){
+        b = getSuccessorRand(1000);
+        if(b == false){
+            break;
+        }
+        double cscore = this->cur_score;
+        curr_index = iter_num % 5;
+        last_scores[curr_index] = cscore;
+        cout << "Score : " << cscore << "\n" ;
+        if (cscore > global_max){
+            global_max = cscore;
+>>>>>>> 07fb47541ee1a5e7deb9c8cab740597384994803
             copyConference();
+        }
+        if(  (iter_num % 50 == 0) && (iter_num > 5)  ){
+            improvement = abs(cscore - getWeightedAvg(last_scores, curr_index));
+            cout << iter_num << " : " << k_param << endl;
+            if(improvement < (0.0001 * cscore)){
+                // k_param = k_param >= 1 ? k_param -1 : 0 ;
+                break;
+            }
         }
     }
 
-    while(getSuccessor(0, true)){
-        cout << "Score : " << this->cur_score << "\n" ;
-        if (this->cur_score > global_max){
-            global_max = this->cur_score;
+    cout << "RANDOM K SHORT maximization complete" << endl;
+    k_param = 10;
+
+
+    for( ; ; iter_num++){
+        b = getSuccessor(k_param, true);
+        if(b == false){
+            break;
+        }
+        double cscore = this->cur_score;
+        curr_index = iter_num % 5;
+        last_scores[curr_index] = cscore;
+        cout << "Score : " << cscore << "\n" ;
+        if (cscore > global_max){
+            global_max = cscore;
             copyConference();
+        }
+        if( (iter_num % 50 == 0) && (iter_num > 5)  ){
+            improvement = abs(cscore - getWeightedAvg(last_scores, curr_index));
+            cout << iter_num << " : " << k_param << endl;
+            if(improvement < (0.00005 * cscore)){
+                k_param = k_param >= 1 ? k_param -1 : 0 ;
+                if(k_param == 0){
+                    break;
+                }
+            }
         }
     }
 
-    cout << "INT maximization complete" << endl;
+    k_param = 10;
+    // while(getSuccessor(0, true)){
+    //     cout << "Score : " << this->cur_score << "\n" ;
+    //     if (this->cur_score > global_max){
+    //         global_max = this->cur_score;
+    //         copyConference();
+    //     }
+    // }
 
-    for( int iter_num = 0; ; iter_num++){
+    cout << "K INT LONG maximization complete" << endl;
+
+    for( ; ; iter_num++){
         b = getSuccessor(k_param, false);
         if(b == false){
             break;
@@ -194,7 +254,7 @@ double SessionOrganizer::run ( )
             global_max = cscore;
             copyConference();
         }
-        if( (iter_num > 5) && (iter_num % 50 == 0)){
+        if( (iter_num % 50 == 0) && (iter_num > 5) ){
             improvement = abs(cscore - getWeightedAvg(last_scores, curr_index));
             cout << iter_num << " : " << k_param << endl;
             if(improvement < (0.0005 * cscore)){
@@ -202,6 +262,9 @@ double SessionOrganizer::run ( )
             }
         }
     }
+
+    cout << "K DOUBLE  maximization complete" << endl;
+
 
     max = scoreOrganization();
     conference->shuffle();
@@ -387,58 +450,58 @@ bool SessionOrganizer::getSuccessor(int K_dyn, bool integerscore)
 
 }
 
-bool SessionOrganizer::getSuccessor1()
-{
-    this->cur_score = scoreOrganization();
-    // Find first index
-    int x = rand() % conference->getSessionsInTrack();
-    int y = rand() % conference->getParallelTracks();
-    int i,j;
-    for ( int i1 = 0; i1 < conference->getSessionsInTrack ( ); i1++ )
-    {
-        i = (i1 + x) % conference->getSessionsInTrack();
-        for ( int j1 = 0; j1 < conference->getParallelTracks ( ); j1++ )
-        {
-            j = (j1 + y) % conference->getParallelTracks();
-            for ( int k = 0; k < conference->getPapersInSession ( ); k++ )
-            {
-                // Find another index
-                for ( int l = i; l < conference->getSessionsInTrack(); l++)
-                {
-                    for ( int m = 0; m < conference->getParallelTracks(); m++)
-                    {
-                        currentTime = time(0);
-                        if(currentTime > endTime)
-                        {
-                            return false;
-                        }
-                        if (l == i && m <= j){
-                            // Skip those of same or previous tracks for this session number
-                            continue; 
-                        }
-                        for (int n = 0; n < conference->getPapersInSession (); n++)
-                        {
-                            conference->swapPapers(j, i, k, m, l, n);
-                            this->new_score = scoreOrganization();
-                            if (this->new_score > this->cur_score){
-                                // If performance improved return true
-                                return true;
-                            }
-                            else{
-                                // Swap back and continue
-                                conference->swapPapers(j, i, k, m, l, n);
-                            }
-                        }
-                    }
-                }
-            }
-        }
-    }
+// bool SessionOrganizer::getSuccessor1()
+// {
+//     this->cur_score = scoreOrganization();
+//     // Find first index
+//     int x = rand() % conference->getSessionsInTrack();
+//     int y = rand() % conference->getParallelTracks();
+//     int i,j;
+//     for ( int i1 = 0; i1 < conference->getSessionsInTrack ( ); i1++ )
+//     {
+//         i = (i1 + x) % conference->getSessionsInTrack();
+//         for ( int j1 = 0; j1 < conference->getParallelTracks ( ); j1++ )
+//         {
+//             j = (j1 + y) % conference->getParallelTracks();
+//             for ( int k = 0; k < conference->getPapersInSession ( ); k++ )
+//             {
+//                 // Find another index
+//                 for ( int l = i; l < conference->getSessionsInTrack(); l++)
+//                 {
+//                     for ( int m = 0; m < conference->getParallelTracks(); m++)
+//                     {
+//                         currentTime = time(0);
+//                         if(currentTime > endTime)
+//                         {
+//                             return false;
+//                         }
+//                         if (l == i && m <= j){
+//                             // Skip those of same or previous tracks for this session number
+//                             continue; 
+//                         }
+//                         for (int n = 0; n < conference->getPapersInSession (); n++)
+//                         {
+//                             conference->swapPapers(j, i, k, m, l, n);
+//                             this->new_score = scoreOrganization();
+//                             if (this->new_score > this->cur_score){
+//                                 // If performance improved return true
+//                                 return true;
+//                             }
+//                             else{
+//                                 // Swap back and continue
+//                                 conference->swapPapers(j, i, k, m, l, n);
+//                             }
+//                         }
+//                     }
+//                 }
+//             }
+//         }
+//     }
 
-    // No successor found with better score
-    return false;
+//     // No successor found with better score
+//     return false;
 
-}
+// }
 
 
 bool SessionOrganizer::getSuccessorRand(int k_def, int limit)
