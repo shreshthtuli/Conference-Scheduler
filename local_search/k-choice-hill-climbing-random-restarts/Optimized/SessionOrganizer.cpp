@@ -67,7 +67,7 @@ SessionOrganizer::SessionOrganizer ( string filename )
     // }
 
 
-    conference->printConference();
+    // conference->printConference();
     cout << "Start score : " << scoreOrganization() << "\n";
     // exit(0);
 }
@@ -163,9 +163,9 @@ void SessionOrganizer::reverseCopyConference(){
 double SessionOrganizer::run ( )
 {
     double max = 0;
-    cout << "Shuffled conference \n";
+    // cout << "Shuffled conference \n";
     // conference->printConference();
-    cout << "Score : " << scoreOrganization() << "\n" ;
+    // cout << "Score : " << scoreOrganization() << "\n" ;
 
     int k_param;
     double improvement = 0.0 ;
@@ -185,14 +185,14 @@ double SessionOrganizer::run ( )
         double cscore = scoreOrganization();
         curr_index = iter_num % 5;
         last_scores[curr_index] = cscore;
-        cout << "Score : " << cscore << "\n" ;
+        // cout << "Score : " << cscore << "\n" ;
         if (cscore > global_max){
             global_max = cscore;
             copyConference();
         }
         if(  (iter_num % 50 == 0) && (iter_num > 5)  ){
             improvement = abs(cscore - getWeightedAvg(last_scores, curr_index));
-            cout << iter_num << " : " << k_param<< " : " << improvement << " : Thesh : " << 0.00025 * cscore << endl;
+            // cout << iter_num << " : " << k_param<< " : " << improvement << " : Thesh : " << 0.00025 * cscore << endl;
             if(improvement < (0.00025 * cscore)){
                 // k_param = k_param >= 1 ? k_param -1 : 0 ;
                 k_param = k_param >= 1 ? k_param -1 : 0 ;
@@ -203,27 +203,27 @@ double SessionOrganizer::run ( )
         }
     }
 
-    cout << "RANDOM K SHORT maximization complete" << endl;
+    // cout << "RANDOM K SHORT maximization complete" << endl;
     k_param = 2;
 
 
     for( ; ; iter_num++){
         b = getSuccessor(k_param, true);
         if(b == false){
-            cout << scoreOrganization() << endl;
+            // cout << scoreOrganization() << endl;
             break;
         }
         double cscore = scoreOrganization();
         curr_index = iter_num % 5;
         last_scores[curr_index] = cscore;
-        cout << "Score : " << cscore << "\n" ;
+        // cout << "Score : " << cscore << "\n" ;
         if (cscore > global_max){
             global_max = cscore;
             copyConference();
         }
         if( (iter_num % 50 == 0) && (iter_num > 5)  ){
             improvement = abs(cscore - getWeightedAvg(last_scores, curr_index));
-            cout << iter_num << " : " << k_param<< " : " << improvement << " : Thesh : " << 0.0009 * cscore << endl;
+            // cout << iter_num << " : " << k_param<< " : " << improvement << " : Thesh : " << 0.0009 * cscore << endl;
             
             if(improvement < (0.0009 * cscore)){
                 k_param = k_param >= 1 ? k_param -1 : 0 ;
@@ -243,18 +243,18 @@ double SessionOrganizer::run ( )
     //     }
     // }
 
-    cout << "K INT LONG maximization complete" << endl;
+    // cout << "K INT LONG maximization complete" << endl;
 
     for( ; ; iter_num++){
         b = getSuccessor(k_param, false);
         if(b == false){
-            cout << scoreOrganization() << endl;
+            // cout << scoreOrganization() << endl;
             break;
         }
         double cscore = scoreOrganization();
         curr_index = iter_num % 5;
         last_scores[curr_index] = cscore;
-        cout << "Score : " << cscore << "\n" ;
+        // cout << "Score : " << cscore << "\n" ;
         if (cscore > global_max){
             global_max = cscore;
             copyConference();
@@ -262,7 +262,7 @@ double SessionOrganizer::run ( )
         if( (iter_num % 50 == 0) && (iter_num > 5) ){
             improvement = abs(cscore - getWeightedAvg(last_scores, curr_index));
 
-            cout << iter_num << " : " << k_param<< " : " << improvement << " : Thesh : " << 0.005 * cscore << endl;
+            // cout << iter_num << " : " << k_param<< " : " << improvement << " : Thesh : " << 0.005 * cscore << endl;
             
             if(improvement < (0.005 * cscore)){
                 k_param = k_param >= 1 ? k_param -1 : 0 ;
@@ -270,7 +270,7 @@ double SessionOrganizer::run ( )
         }
     }
 
-    cout << "K DOUBLE  maximization complete" << endl;
+    // cout << "K DOUBLE  maximization complete" << endl;
 
 
     max = scoreOrganization();
@@ -306,13 +306,13 @@ void SessionOrganizer::readInInputFile ( string filename )
     }
     else
     {
-        cout << "Unable to open input file";
+        // cout << "Unable to open input file";
         exit ( 0 );
     }
 
     if ( 6 > lines.size ( ) )
     {
-        cout << "Not enough information given, check format of input file";
+        // cout << "Not enough information given, check format of input file";
         exit ( 0 );
     }
 
@@ -354,7 +354,7 @@ void SessionOrganizer::readInInputFile ( string filename )
     int slots = parallelTracks * papersInSession*sessionsInTrack;
     if ( slots != numberOfPapers )
     {
-        cout << "More papers than slots available! slots:" << slots << " num papers:" << numberOfPapers << endl;
+        // cout << "More papers than slots available! slots:" << slots << " num papers:" << numberOfPapers << endl;
         exit ( 0 );
     }
 }
@@ -556,7 +556,7 @@ void SessionOrganizer::printSessionOrganiser ( char * filename)
 {
     best_conference->printConference ( filename);
     conference = best_conference;
-    cout << "Best score : " << scoreOrganization() << " \n";
+    // cout << "Best score : " << scoreOrganization() << " \n";
 }
 
 double SessionOrganizer::scoreOrganization ( )
