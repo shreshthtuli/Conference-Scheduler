@@ -324,7 +324,8 @@ void SessionOrganizer::readInInputFile ( string filename )
     total_neighbours = papersInSession * sessionsInTrack * parallelTracks * (parallelTracks * sessionsInTrack - 1) * papersInSession / 2;
     n = papersInSession * parallelTracks * sessionsInTrack;
 
-    endTime = startTime + ((processingTimeInMinutes * 60) - 1);
+    double overhead = n > 1500 ? 2.0 : 1.0 ;
+    endTime = startTime + ((processingTimeInMinutes * 60.0) - overhead);
     int n = lines.size ( ) - 5;
     double ** tempDistanceMatrix = new double*[n];
     unsigned short ** tempDistanceMatrixInt = new unsigned short*[n];
