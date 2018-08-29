@@ -175,15 +175,6 @@ double SessionOrganizer::run ( )
     bool b ;
     int iter_num = 0;
 
-    // while(getSuccessorRand()){
-    //     cout << "Score : " << this->cur_score << "\n" ;
-    //     if (this->cur_score > global_max){
-    //         global_max = this->cur_score;
-    //         copyConference();
-    //     }
-    // }
-
-
     k_param = n > 300 ? 25 : 4;
 
     for( ; ; iter_num++){
@@ -219,6 +210,7 @@ double SessionOrganizer::run ( )
     for( ; ; iter_num++){
         b = getSuccessor(k_param, true);
         if(b == false){
+            cout << scoreOrganization() << endl;
             break;
         }
         double cscore = this->cur_score;
@@ -256,6 +248,7 @@ double SessionOrganizer::run ( )
     for( ; ; iter_num++){
         b = getSuccessor(k_param, false);
         if(b == false){
+            cout << scoreOrganization() << endl;
             break;
         }
         double cscore = this->cur_score;
@@ -634,7 +627,13 @@ double SessionOrganizer::scoreOrganizationInt ()
                 for ( int l = k + 1; l < tmpSession.getNumberOfPapers ( ); l++ )
                 {
                     int index2 = tmpSession.getPaper ( l );
-                    score1 += 10 - distanceMatrixInt[index1][index2];
+                    if(distanceMatrixInt[index1][index2] > 9)
+                    {
+                        score1 = 0;
+                    }
+                    else{
+                        score1 = score1 + 9 - distanceMatrixInt[index1][index2];
+                    }
                 }
             }
         }
