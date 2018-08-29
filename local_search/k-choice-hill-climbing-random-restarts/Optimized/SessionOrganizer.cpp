@@ -163,7 +163,7 @@ double SessionOrganizer::run ( )
 
     bool b ;
 
-    while(getSuccessorRand()){
+    while(getSuccessorRand(0, 1000)){
         cout << "Score : " << this->cur_score << "\n" ;
         if (this->cur_score > global_max){
             global_max = this->cur_score;
@@ -186,7 +186,7 @@ double SessionOrganizer::run ( )
         if(b == false){
             break;
         }
-        double cscore = scoreOrganization();
+        double cscore = this->cur_score;
         curr_index = iter_num % 5;
         last_scores[curr_index] = cscore;
         cout << "Score : " << cscore << "\n" ;
@@ -441,19 +441,18 @@ bool SessionOrganizer::getSuccessor1()
 }
 
 
-bool SessionOrganizer::getSuccessorRand()
+bool SessionOrganizer::getSuccessorRand(int k_def, int limit)
 {
-    this->cur_score = scoreOrganization();
-    stringSet.clear();
+    this->cur_score = scoreOrganizationInt();
     int i,j,k,l,m,n;
     int counter = 0;
-    while(counter < total_neighbours){
+    while(counter < limit){
         currentTime = time(0);
         if(currentTime > endTime)
         {
             return false;
         }
-        while(true)
+        while(counter < limit)
         {
             i = rand() % conference->getSessionsInTrack ( );
             l = rand() % conference->getSessionsInTrack ( );
@@ -466,16 +465,8 @@ bool SessionOrganizer::getSuccessorRand()
         k = rand() % conference->getPapersInSession();
         n = rand() % conference->getPapersInSession();
 
-        if(stringSet.find(to_string(i)+to_string(j)+to_string(k)+to_string(l)+to_string(m)+to_string(n))!=stringSet.end() 
-        || stringSet.find(to_string(l)+to_string(m)+to_string(n)+to_string(i)+to_string(j)+to_string(k))!=stringSet.end())
-        {
-            continue;
-        }
-
-        counter++;
-        stringSet.insert(to_string(i)+to_string(j)+to_string(k)+to_string(l)+to_string(m)+to_string(n));
         conference->swapPapers(j, i, k, m, l, n);
-        this->new_score = scoreOrganization();
+        this->new_score = scoreOrganizationInt();
         if (this->new_score > this->cur_score){
             // If performance improved return true
             return true;
@@ -599,5 +590,5 @@ double SessionOrganizer::scoreOrganizationInt ()
         }
     }
     double score = score1 + tradeoffCoefficient*score2;
-    return score;
+    return score/10;
 }

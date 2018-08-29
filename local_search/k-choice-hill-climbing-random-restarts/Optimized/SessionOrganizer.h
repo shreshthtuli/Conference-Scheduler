@@ -111,7 +111,7 @@ public:
      */
     bool getSuccessor(int k_dy, bool integerscore);    
     bool getSuccessor1();    
-    bool getSuccessorRand();    
+    bool getSuccessorRand(int k, int limit);    
 
     double getWeightedAvg(double * a, int idx);
     /**
