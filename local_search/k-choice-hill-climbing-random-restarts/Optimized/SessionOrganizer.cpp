@@ -47,14 +47,25 @@ SessionOrganizer::SessionOrganizer ( string filename )
     //     }
     // }
     
-    // for(int i = 0; i < conference->n; i++)
-    // {
-    //     for(int j = 0; j < conference->n; j++)
-    //     {
-    //         cout << distanceMatrix[i][j] << " ";
-    //     }
-    //     cout << endl;
-    // }
+    for(int i = 0; i < conference->n; i++)
+    {
+        for(int j = 0; j < conference->n; j++)
+        {
+            cout << distanceMatrix[i][j] << " ";
+        }
+        cout << endl;
+    }
+    cout << endl;
+
+    for(int i = 0; i < conference->n; i++)
+    {
+        for(int j = 0; j < conference->n; j++)
+        {
+            cout << distanceMatrixInt[i][j] << " ";
+        }
+        cout << endl;
+    }
+
 
     conference->printConference();
     cout << "Start score : " << scoreOrganization() << "\n";
@@ -623,7 +634,7 @@ double SessionOrganizer::scoreOrganizationInt ()
                 for ( int l = k + 1; l < tmpSession.getNumberOfPapers ( ); l++ )
                 {
                     int index2 = tmpSession.getPaper ( l );
-                    score1 += 1 - distanceMatrixInt[index1][index2];
+                    score1 += 10 - distanceMatrixInt[index1][index2];
                 }
             }
         }
