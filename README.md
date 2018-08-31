@@ -61,4 +61,4 @@ For any queries and information please contact the developers:
 
 ## License
 
-[Apache License 2.0](LICENSE)
+[MIT](LICENSE)
