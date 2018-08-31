@@ -6,7 +6,7 @@ Scenario: Optimization of Conference Schedule.
 
 A conference has n papers accepted. The job is to organize them in a best possible schedule. The schedule has p parallel sessions at a given time. Each session has k papers. And there are a total of t time slots. We can assume that n = t.p.k. For example, in Figure below t =2, p = 3 and k =4.
 
-Papers 1,2,3,4      Papers 5,6,7,8      Papers 9,10,11,12
+Papers 1,2,3,4      Papers 5,6,7,8      Papers 9,10,11,12 </br>
 Papers 13,14,15,16  Papers 17,18,19,20  Papers 21,22,23,24
 
 We first define the characteristics of a good schedule. For any good schedule most people should feel no conflict about which session to attend. That is, (1) all papers in one session should be related to a single theme. And (2) all papers in parallel sessions should be as far away as possible to avoid conflict.
@@ -55,8 +55,8 @@ It can be verified that for this problem the total goodness is 4.4.
 If you have any trouble understading some part of the code, feel free to raise an issue or for contributing, feel free to make a pull request.
 
 ## Contact
-For any queries and information please contact the developers:
-@shreshthtuli
+For any queries and information please contact the developers: </br>
+@shreshthtuli </br> 
 @udit01
 
 ## License
